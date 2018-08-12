@@ -9,10 +9,11 @@ height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
 print("Image Size: %d x %d" % (width, height))
 
 if cap.isOpened():
-	ret, frame = cap.read()
+	for i in range(100):
+		ret, frame = cap.read()
 
 	if ret:
-		cv2.imwrite('example.png', frame)
+		cv2.imwrite('yenshuo.jpg', frame)
 	else:
 		print('Read Fail...')
 

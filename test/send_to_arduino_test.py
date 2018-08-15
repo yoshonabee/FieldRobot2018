@@ -1,10 +1,12 @@
 import serial
 from time import sleep
 
-plug = 'com'
+plug = '/dev/cu.usbmodem1411'
 s = serial.Serial(plug, 9600)
 
 
 while True:
-	s.write('Hello, world!'.encode())
+	s.write('H'.encode())
+	sleep(1)
+	s.write('L'.encode())
 	sleep(1)

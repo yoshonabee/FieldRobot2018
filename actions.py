@@ -3,9 +3,9 @@ import math
 
 class Actions():
 	def __init__(self, mc_port, ees_port):
-		self.motor_controller = serial.Serial(mc_port, 9600)
-		self.eat_egg_system = serial.Serial(ees_port, 9600)
-
+		#self.motor_controller = serial.Serial(mc_port, 9600)
+		#self.eat_egg_system = serial.Serial(ees_port, 9600)
+		pass
 	def turn(self, speed):
 		self.motor_controller.write('T{0}'.format(speed).encode())
 		return

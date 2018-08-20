@@ -23,7 +23,7 @@ def get_eggs_info(filepath):
 	f = open(filepath, 'r')
 	row = csv.reader(f, delimiter=',')
 
-	eggs = [Egg(r[1], r[2], r[3], r[4]) for r in row]
+	eggs = [Egg(float(r[1]), float(r[2]), float(r[3]), float(r[4])) for r in row]
 	f.close()
 
 	return eggs

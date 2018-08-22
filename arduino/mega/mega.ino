@@ -2,10 +2,17 @@
 
 void setup() {
   Wire.begin(0x08);
-  Serial.begin(9600);
+  Serial.begin(115200);
+  Wire.onReceive(receiveEvent)
 }
 
 void loop() {
-  int r = Wire.read();
-  Serial.println(r);
+  delay(100);
+}
+
+void receiveEvent() {
+  while (Wire.available()) {
+    char r = Wire.read();
+    Serial.println(r);
+  }
 }

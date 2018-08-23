@@ -1,5 +1,7 @@
 #include <Wire.h>
-int state = 0;
+char mode;
+String spd_str;
+float spd;
 
 void setup() {
   pinMode(13, OUTPUT);
@@ -9,13 +11,21 @@ void setup() {
 }
 
 void loop() {
-  delay(100);
+  delay(10);
 }
 
-void receiveEvent(int how) {
+void receiveEvent(int ptr) {
+  mode = Wire.read();
+  Serial.print("mode:");
+  Serial.println(mode);
+
+  spd_str = "";
   while (Wire.available()) {
-    state += 1;
-    int r = Wire.read();
-    digitalWrite(13, state % 2);
+    char r = Wire.read();
+    spd_str += r;
   }
+
+  spd = spd_str.toFloat()
+  Serial.print("speed:");
+  Serial.println(spd);
 }

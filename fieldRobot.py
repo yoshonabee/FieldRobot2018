@@ -6,10 +6,10 @@ from actions import Actions
 arg = get_args()
 
 THRES_MID = 0.05
-ARDUINO_MEGA_PORT = 'mega'
-ARDUINO_UNO_PORT = 'uno'
+ADDR_MEGA = '0x08'
+ADDR_UNO = '0x04'
 
-action = Actions(ARDUINO_MEGA_PORT, ARDUINO_UNO_PORT)
+action = Actions(ADDR_MEGA, ADDR_UNO)
 
 egg_eaten = 0
 mission_complete = False

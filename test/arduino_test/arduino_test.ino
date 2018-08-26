@@ -25,7 +25,7 @@ void receiveEvent(int ptr) {
     spd_str += r;
   }
 
-  spd = spd_str.toFloat()
+  spd = spd_str.toFloat();
   Serial.print("speed:");
   Serial.println(spd);
 }

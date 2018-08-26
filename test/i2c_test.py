@@ -9,10 +9,10 @@ ADDR_MEGA = 0x08
 speed = 0.015
 
 while True:
-	i2c.write_byte(ord('T'))
+	i2c.write_byte(ADDR_MEGA, ord('T'))
 	# i2c.write_byte(str(len(str(speed))))
 	
 	for s in str(speed):
-		i2c.write_byte(ord(s))
+		i2c.write_byte(ADDR_MEGA, ord(s))
 	
 	sleep(1)

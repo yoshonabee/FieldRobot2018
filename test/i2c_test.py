@@ -10,9 +10,9 @@ speed = 0.015
 
 while True:
 	i2c.write_byte(ord('T'))
-	i2c.write_byte(str(len(str(speed))))
+	# i2c.write_byte(str(len(str(speed))))
 	
 	for s in str(speed):
-		i2c.write_byte(s)
+		i2c.write_byte(ord(s))
 	
 	sleep(1)

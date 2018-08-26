@@ -13,7 +13,11 @@ void loop() {
   delay(100);
 }
 
-void receiveEvent(int how) {
+int get_ball_state() {
+  
+}
+
+void receiveEvent(int tmp) {
   while (Wire.available()) {
     state += 1;
     int r = Wire.read();
@@ -22,7 +26,11 @@ void receiveEvent(int how) {
   }
 }
 
-void requestEvent(int how) {
-  Wire.write("good");
+void requestEvent(int tmp) {
+  int have_ball = get_ball_state();
+  Wire.write(have_ball);
+
+  if (have_ball)
+    eat_ball();
 }
 

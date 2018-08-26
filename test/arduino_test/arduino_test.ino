@@ -20,6 +20,7 @@ void receiveEvent(int ptr) {
   Serial.println(mode);
 
   spd_str = "";
+  delay(10);
   while (Wire.available()) {
     char r = Wire.read();
     spd_str += r;

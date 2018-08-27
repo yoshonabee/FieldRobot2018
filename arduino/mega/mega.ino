@@ -15,14 +15,15 @@ void loop() {
 }
 
 void receiveEvent(int ptr) {
-  mode = Wire.read();
-  Serial.print("mode:");
-  Serial.println(mode);
+  if (Wire.available()) {
+    mode = Wire.read();
+    Serial.print("mode:");
+    Serial.println(mode);
+  }
 
   spd_str = "";
   while (Wire.available()) {
-    char r = Wire.read();
-    spd_str += r;
+    spd_str += (char)Wire.read();
   }
 
   spd = spd_str.toFloat();

@@ -1,5 +1,5 @@
 #include <Wire.h>
-char mode;
+int mode;
 String spd_str;
 float spd;
 
@@ -11,22 +11,19 @@ void setup() {
 }
 
 void loop() {
-  delay(10);
+//  delay(10);
 }
 
 void receiveEvent(int ptr) {
-  mode = Wire.read();
-  Serial.print("mode:");
-  Serial.println(mode);
-
-  spd_str = "";
-  delay(10);
-  while (Wire.available()) {
-    char r = Wire.read();
-    spd_str += r;
+  if (Wire.available()) {
+    mode = Wire.read();
+    Serial.print("mode:");
+    Serial.println(mode);
   }
-
-  spd = spd_str.toFloat();
-  Serial.print("speed:");
-  Serial.println(spd);
+  
+  spd_str = "";
+  while (Wire.available()) {
+    spd_str += (char)Wire.read();
+  }
+  Serial.println(spd_str);
 }

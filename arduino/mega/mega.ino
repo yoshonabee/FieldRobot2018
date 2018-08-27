@@ -4,7 +4,6 @@ String spd_str;
 float spd;
 
 void setup() {
-  pinMode(13, OUTPUT);
   Wire.begin(0x08);
   Serial.begin(115200);
   Wire.onReceive(receiveEvent);

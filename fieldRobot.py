@@ -30,13 +30,15 @@ while not mission_complete:
 		if not same_target_egg(target, last_target):
 			action.eat()
 			egg_eaten += 1
+
+			if (egg_eaten == 20):
+				mission_complete = True
+
+			last_target = None
 	else:
 		if math.abs(target.x - 0.5) > THRES_MID:
 			action.turn(target.x - 0.5)
 		else:
 			action.forward(1)
 
-	if (egg_eaten == 20):
-		mission_complete = True
-
-	last_target = target
+		last_target = target

@@ -11,13 +11,10 @@ class Egg():
 		self.h = h
 		self.area = w * h
 		self.distance_to_center = math.sqrt(4 * (x - 0.5) ** 2 + 3 * (y - 0.5) ** 2)
-		self.distance = self.get_distance()
-
-	def get_distance(self):
-		return math.sqrt(self.area) + self.distance_to_center + 0
+		self.distance = math.sqrt(self.area) + self.distance_to_center + 0
 		
 	def print(self):
-		print('x:{0} y:{1} weight:{2} height:{3} distance:{4}'.format(self.x, self.y, self.w, self.h, self.distance))
+		print('x:{0} y:{1} width:{2} height:{3} distance:{4}'.format(self.x, self.y, self.w, self.h, self.distance))
 
 def get_eggs_info(filepath):
 	f = open(filepath, 'r')

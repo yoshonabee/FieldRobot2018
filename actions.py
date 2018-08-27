@@ -20,6 +20,6 @@ class Actions():
 
 		while not eaten:
 			bus.write_i2c_block_data(self.mc, ord('F'), [ord(s) for s in str(speed)])
-			if read_byte(self.ees) == 'E':
+			if chr(read_byte(self.ees)) == 'E':
 				eaten = True
 		return

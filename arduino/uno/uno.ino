@@ -1,15 +1,15 @@
 #include <Wire.h>
 #include <Servo.h>
 
-#define trig 6;
-#define echo 7;
-#define flap 3;
-#define cat 5;
-#define S0 8;
-#define S1 9;
-#define S2 10;
-#define S3 11;
-#define sensorOut 12;
+#define trig 6
+#define echo 7
+#define flap 3
+#define cat 5
+#define S0 8
+#define S1 9
+#define S2 10
+#define S3 11
+#define sensorOut 12
 
 int have_egg = 0;
 int red = 0, green = 0, blue = 0, color = 0;
@@ -18,9 +18,9 @@ Servo servo_flap;
 Servo servo_cat;
 
 void setup() {
-  Wire.begin(0x04);
+//  Wire.begin(0x04);
   Serial.begin(115200);
-  Wire.onRequest(requestEvent);
+//  Wire.onRequest(requestEvent);
 
   servo_flap.attach(flap, 700, 2500);
   servo_cat.attach(cat, 700, 2500);
@@ -37,9 +37,7 @@ void setup() {
   digitalWrite(S1,LOW);
 }
 
-void loop() {
-  delay(10);
-}
+
 
 int get_egg_state() {
   float duration, distance;
@@ -60,7 +58,7 @@ void get_color() {
   Serial.print("R= ");
   Serial.print(red);
   Serial.print("  ");
-  delay(10);
+  delay(100);
 
   digitalWrite(S2,HIGH);
   digitalWrite(S3,HIGH);
@@ -68,7 +66,7 @@ void get_color() {
   Serial.print("G= ");
   Serial.print(green);
   Serial.print("  ");
-  delay(10);
+  delay(100);
 
   digitalWrite(S2,LOW);
   digitalWrite(S3,HIGH);
@@ -76,7 +74,7 @@ void get_color() {
   Serial.print("B= ");
   Serial.print(blue);
   Serial.println("  ");
-  delay(10);
+  delay(100);
 }
 
 void whatColor() {
@@ -114,4 +112,7 @@ void requestEvent() {
     have_egg = get_egg_state();
   }
 }
-
+void loop() {
+  get_color();
+  delay(100);
+}

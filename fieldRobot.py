@@ -6,8 +6,10 @@ from actions import Actions
 arg = get_args()
 
 THRES_MID = 0.05
-ADDR_MEGA = '0x08'
-ADDR_UNO = '0x04'
+
+ADDR_LEFT = 0x08
+ADDR_RIGHT = 0x0c
+ADDR_UNO = 0x04
 
 action = Actions(ADDR_MEGA, ADDR_UNO)
 
@@ -39,6 +41,6 @@ while not mission_complete:
 		if math.abs(target.x - 0.5) > THRES_MID:
 			action.turn(target.x - 0.5)
 		else:
-			action.forward(1)
+			action.forward(45)
 
 		last_target = target

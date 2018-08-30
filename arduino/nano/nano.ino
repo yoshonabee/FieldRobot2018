@@ -1,3 +1,5 @@
+#include <Wire.h>
+
 #define MotorA 10
 #define MotorB 11
 #define EncoderA 3
@@ -8,39 +10,72 @@
 
 #define LOOPTIME 50
 
-unsigned long lastMilli = 0;
-int speed_req = 45;
+volatile int speed_req = 0;
+
 int speed_act = 0;
 int PWM_val = 80;
 volatile long count = 0;
+long countAnt = 0;
+unsigned long lastMilli = 0;
+
+char direct;
+char last_direct;
+String spd_str;
 
 void setup() {
+  Wire.begin(0x08);
   Serial.begin(115200);
+  Wire.onReceive(receiveEvent);
+
   pinMode(MotorA, OUTPUT);
   pinMode(MotorB, OUTPUT);
   pinMode(EncoderA, INPUT_PULLUP);
   pinMode(EncoderB, INPUT_PULLUP);
   attachInterrupt(1, rencoder, FALLING);
-
-  digitalWrite(MotorB, LOW);
-  analogWrite(MotorA, PWM_val);
 }
 
 void loop() {
+  if (direct != last_direct) {
+    count = 0;
+    countAnt = 0;
+    lastMilli = millis();
+    last_direct = direct;
+  }
+  
   if((millis()-lastMilli) >= LOOPTIME) {
       lastMilli = millis();
       getMotorData();
       PWM_val = updatePid();
-      digitalWrite(MotorB, LOW);
-      analogWrite(MotorA, PWM_val);
+      
+      if (direct == 'F') {
+        digitalWrite(MotorB, LOW);
+        analogWrite(MotorA, PWM_val);
+      } else if (direct == 'B') {
+        digitalWrite(MotorA, LOW);
+        analogWrite(MotorB, PWM_val);
+      }
 
       Serial.print("   PWM_val:");
       Serial.println(PWM_val);
   }
 }
 
+void receiveEvent(int ptr) {
+  if (Wire.available()) {
+    direct = Wire.read();
+    Serial.print("direct:");
+    Serial.println(direct);
+  }
+
+  spd_str = "";
+  while (Wire.available()) {
+    spd_str += (char)Wire.read();
+  }
+
+  speed_req = spd_str.toInt();
+}
+
 void getMotorData() {
-  static long countAnt = 0;
   speed_act = ((count - countAnt) * (60 * (1000 / LOOPTIME))) / (14 * 27);
   countAnt = count;
 }
@@ -69,4 +104,3 @@ void rencoder() {
   if (digitalRead(EncoderB) == HIGH) count++;
   else count--;
 }
-

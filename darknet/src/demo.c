@@ -36,7 +36,10 @@ static box *boxes;
 static network net;
 static image in_s ;
 static image det_s;
-static CvCapture * cap;
+static CvCapture * cap1;
+static CvCapture * cap2;
+static CvCapture * cap3;
+static CvCapture * cap4;
 static int cpp_video_capture = 0;
 static float fps = 0;
 static float demo_thresh = 0;
@@ -68,9 +71,28 @@ void *fetch_in_thread(void *ptr)
     //in = get_image_from_stream(cap);
     int dont_close_stream = 0;    // set 1 if your IP-camera periodically turns off and turns on video-stream
     if(letter_box)
-        in_s = get_image_from_stream_letterbox(cap, net.w, net.h, net.c, &in_img, cpp_video_capture, dont_close_stream);
+        in_s = get_image_from_stream_letterbox(cap1, net.w, net.h, net.c, &in_img, cpp_video_capture, dont_close_stream);
     else
-        in_s = get_image_from_stream_resize(cap, net.w, net.h, net.c, &in_img, cpp_video_capture, dont_close_stream);
+        in_s = get_image_from_stream_resize(cap1, net.w, net.h, net.c, &in_img, cpp_video_capture, dont_close_stream);
+    if(!in_s.data){
+        //error("Stream closed.");
+        printf("Stream closed.\n");
+        flag_exit = 1;
+        return EXIT_FAILURE;
+    }
+    //in_s = resize_image(in, net.w, net.h);
+    
+    count_img++;
+    return 0;
+}
+
+void *fetch_in_thread_caps(CvCapture *c)
+{
+    int dont_close_stream = 0;    // set 1 if your IP-camera periodically turns off and turns on video-stream
+    if(letter_box)
+        in_s = get_image_from_stream_letterbox(c, net.w, net.h, net.c, &in_img, cpp_video_capture, dont_close_stream);
+    else
+        in_s = get_image_from_stream_resize(c, net.w, net.h, net.c, &in_img, cpp_video_capture, dont_close_stream);
     if(!in_s.data){
         //error("Stream closed.");
         printf("Stream closed.\n");
@@ -202,7 +224,7 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
 //        cap = cvCaptureFromFile(filename);
 //#else                    // OpenCV 3.x
         cpp_video_capture = 1;
-        cap = get_capture_video_stream(filename);
+        cap1 = get_capture_video_stream(filename);
 //#endif
     }else{
         printf("Webcam index: %d\n", cam_index);
@@ -210,11 +232,11 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
 //        cap = cvCaptureFromCAM(cam_index);
 //#else                    // OpenCV 3.x
         cpp_video_capture = 1;
-        cap = get_capture_webcam(cam_index);
+        cap1 = get_capture_webcam(cam_index);
 //#endif
     }
 
-    if (!cap) {
+    if (!cap1) {
 #ifdef WIN32
         printf("Check that you have copied file opencv_ffmpeg340_64.dll to the same directory where is darknet.exe \n");
 #endif
@@ -270,7 +292,7 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
         CvSize size;
         size.width = det_img->width, size.height = det_img->height;
         int src_fps = 25;
-        src_fps = get_stream_fps(cap, cpp_video_capture);
+        src_fps = get_stream_fps(cap1, cpp_video_capture);
 
         //const char* output_name = "test_dnn_out.avi";
         //output_video_writer = cvCreateVideoWriter(out_filename, CV_FOURCC('H', '2', '6', '4'), src_fps, size, 1);
@@ -340,7 +362,7 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
             det_img = in_img;
             det_s = in_s;
         }else if (running_mode == 1) {
-            if(pthread_create(&fetch_thread, 0, fetch_in_thread, 0)) error("Thread creation failed");
+            if(pthread_create(&fetch_thread, 0, fetch_in_thread_caps, cap1)) error("Thread creation failed");
             if(pthread_create(&detect_thread, 0, detect_in_thread_no_img, 0)) error("Thread creation failed");	
 
             pthread_join(fetch_thread, 0);
@@ -349,19 +371,7 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
             cvReleaseImage(&det_img);
             det_img = in_img;
             det_s = in_s;
-	}else {
-            fetch_in_thread(0);
-            det_img = in_img;
-            det_s = in_s;
-            detect_in_thread(0);
-
-            show_img = det_img;
-            if (!dont_show) {
-                show_image_cv_ipl(show_img, "Demo");
-                cvWaitKey(1);
-            }
-            cvReleaseImage(&show_img);
-        }
+	}
         --delay;
         if(delay < 0){
             delay = frame_skip;

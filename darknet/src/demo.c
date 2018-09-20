@@ -165,7 +165,6 @@ void *detect_in_thread_no_img(void *ptr) {
 
     printf("\033[2J");
     printf("\033[1;1H");
-    //printf("\n");
     printf("%f", count_img / 20.0);
     printf("\nFPS:%.1f\n",fps);
     printf("Objects:\n\n");

@@ -1,38 +1,30 @@
 import smbus
 
 class Actions():
-	def __init__(self, mc_addr, ees_addr):
+	def __init__(self, left_addr, right_addr, ees_addr):
 		self.bus = smbus.SMBus(1)
 		self.left = left_addr
 		self.right = right_addr
 		self.ees = ees_addr
 
-	def forward(self, speed):
-		bus.write_i2c_block_data(self.left, ord('F'), [ord(s) for s in str(speed)])
-		bus.write_i2c_block_data(self.right, ord('F'), [ord(s) for s in str(speed)])
+	def start():
+		self.bus.write_byte(self.ees, ord('1'));
+
+	def forward(self, spd_left, spd_right):
+		self.bus.write_i2c_block_data(self.left, ord('F'), [ord(s) for s in str(spd_left)])
+		self.bus.write_i2c_block_data(self.right, ord('F'), [ord(s) for s in str(spd_right)])
 		return
 
-	def backward(self, speed):
-		bus.write_i2c_block_data(self.left, ord('B'), [ord(s) for s in str(speed)])
-		bus.write_i2c_block_data(self.right, ord('B'), [ord(s) for s in str(speed)])
+	def backward(self, spd_left, spd_right):
+		self.bus.write_i2c_block_data(self.left, ord('B'), [ord(s) for s in str(spd_left)])
+		self.bus.write_i2c_block_data(self.right, ord('B'), [ord(s) for s in str(spd_right)])
 		return
 
-	def turn(self, speed):
+	def turn(self, spd):
 		if speed >= 0:
-			bus.write_i2c_block_data(self.left, ord('F'), [ord(s) for s in str(speed)])
-			bus.write_i2c_block_data(self.right, ord('B'), [ord(s) for s in str(speed)])
+			self.bus.write_i2c_block_data(self.left, ord('F'), [ord(s) for s in str(spd)])
+			self.bus.write_i2c_block_data(self.right, ord('B'), [ord(s) for s in str(spd)])
 		else:
-			bus.write_i2c_block_data(self.left, ord('B'), [ord(s) for s in str(speed)])
-			bus.write_i2c_block_data(self.right, ord('F'), [ord(s) for s in str(speed)])
-		return
-
-	
-
-	def eat(self):
-		eaten = False
-
-		while not eaten:
-			bus.write_i2c_block_data(self.mc, ord('F'), [ord(s) for s in '15'])
-			if chr(read_byte(self.ees)) == 'E':
-				eaten = True
+			self.bus.write_i2c_block_data(self.left, ord('B'), [ord(s) for s in str(spd)])
+			self.bus.write_i2c_block_data(self.right, ord('F'), [ord(s) for s in str(spd)])
 		return

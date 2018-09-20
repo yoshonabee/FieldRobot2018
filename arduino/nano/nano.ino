@@ -6,7 +6,7 @@
 #define EncoderB 8
 
 #define Kp 0.4
-#define Kd 0.5
+#define Kd 1
 
 #define LOOPTIME 50
 
@@ -48,23 +48,23 @@ void loop() {
       PWM_val = updatePid();
       
       if (direct == 'F') {
-        digitalWrite(MotorB, LOW);
         analogWrite(MotorA, PWM_val);
+        digitalWrite(MotorB, LOW);
       } else if (direct == 'B') {
         digitalWrite(MotorA, LOW);
         analogWrite(MotorB, PWM_val);
       }
 
-      Serial.print("   PWM_val:");
-      Serial.println(PWM_val);
+//      Serial.print("   PWM_val:");
+//      Serial.println(PWM_val);
   }
 }
 
 void receiveEvent(int ptr) {
   if (Wire.available()) {
     direct = Wire.read();
-    Serial.print("direct:");
-    Serial.println(direct);
+//    Serial.print("direct:");
+//    Serial.println(direct);
   }
 
   spd_str = "";
@@ -88,14 +88,14 @@ int updatePid() {
   pidTerm = (Kp * error) + (Kd * (error - last_error));
   last_error = error;
 
-  Serial.print("speed_req:");
-  Serial.print(speed_req);
-  Serial.print("   speed_act:");
-  Serial.print(speed_act);
-  Serial.print("   error:");
-  Serial.print(error);
-  Serial.print("   pidTerm:");
-  Serial.print(pidTerm);
+//  Serial.print("speed_req:");
+//  Serial.print(speed_req);
+//  Serial.print("   speed_act:");
+//  Serial.print(speed_act);
+//  Serial.print("   error:");
+//  Serial.print(error);
+//  Serial.print("   pidTerm:");
+//  Serial.print(pidTerm);
 
   return constrain(PWM_val + int(pidTerm), 0, 255);
 }

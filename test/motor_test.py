@@ -3,8 +3,8 @@ from time import sleep
 
 bus = smbus.SMBus(1)
 
-ADDR_LEFT = 0x08
-ADDR_RIGHT = 0x0c
+ADDR_LEFT = 0x04
+ADDR_RIGHT = 0x08
 
 # speed = 45
 

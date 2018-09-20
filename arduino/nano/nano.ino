@@ -46,8 +46,11 @@ void loop() {
       lastMilli = millis();
       getMotorData();
       PWM_val = updatePid();
-      
-      if (direct == 'F') {
+
+      if (speed_req == 0) {
+        digitalWrite(MotorA, LOW);
+        digitalWrite(MotorB, LOW);
+      } else if (direct == 'F') {
         analogWrite(MotorA, PWM_val);
         digitalWrite(MotorB, LOW);
       } else if (direct == 'B') {

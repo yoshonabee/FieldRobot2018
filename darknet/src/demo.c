@@ -138,7 +138,7 @@ void *detect_in_thread(void *ptr)
     //det_img = ipl_images[(demo_index + FRAMES / 2 + 1) % FRAMES];
     //demo_index = (demo_index + 1)%FRAMES;
 
-    draw_detections_cv_v3(det_img, dets, nboxes, demo_thresh, demo_names, demo_alphabet, demo_classes, demo_ext_output);
+    // draw_detections_cv_v3(det_img, dets, nboxes, demo_thresh, demo_names, demo_alphabet, demo_classes, demo_ext_output);
     free_detections(dets, nboxes);
     
     

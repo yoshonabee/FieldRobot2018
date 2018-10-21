@@ -16,19 +16,23 @@ class Egg():
 	def print(self):
 		print('x:{0} y:{1} width:{2} height:{3} distance:{4}'.format(self.x, self.y, self.w, self.h, self.distance))
 
-def get_eggs_info(filepath):
+def getTarget(filepath):
 	f = open(filepath, 'r')
 	row = csv.reader(f, delimiter=',')
 
 	eggs = [Egg(float(r[1]), float(r[2]), float(r[3]), float(r[4])) for r in row]
 	f.close()
 
-	return eggs
+	if len(eggs) == 0:
+		return None
 
-def get_nearest_egg(eggs):
 	neareat_egg = Egg(0, 0, 0.001, 0.001)
 
+	print("\033[2J")
+	print("\033[1;1H")
+
 	for i in eggs:
+		i.print()
 		if math.abs(i.distance - neareat_egg.distance) < 0.001:
 			if i.distance_to_center < neareat_egg.distance_to_center:
 				neareat_egg = i

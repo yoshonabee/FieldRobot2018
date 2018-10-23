@@ -276,7 +276,7 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
         det_s = in_s;
     }
 
-    int count = 0;
+    
     dont_show = 1;
     if(!prefix && !dont_show){
         cvNamedWindow("Demo", CV_WINDOW_NORMAL);
@@ -284,8 +284,10 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
         cvResizeWindow("Demo", 1352, 1013);
     }
 
-    // out_filename = calloc(15, sizeof(char));
-    // strcpy(out_filename, "../out02.avi");
+    int count = 0;
+    
+    out_filename = calloc(15, sizeof(char));
+    strcpy(out_filename, "../out02.avi");
 
     CvVideoWriter* output_video_writer = NULL;    // cv::VideoWriter output_video;
     if (out_filename && !flag_exit)

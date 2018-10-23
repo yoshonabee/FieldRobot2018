@@ -21,14 +21,14 @@ while not mission_complete:
 	target = getTarget(arg.eggs_info_filepath)
 	
 	if target == None:
-		if last_target = None:
+		if last_target == None:
 			continue
 		else:
 			target = last_target
 
 	print("\n\n\n\n")
 	target.print()
-	continue	
+
 	if last_target is not None:
 		if not same_target_egg(target, last_target):
 			action.forward(60, 60)

@@ -18,7 +18,7 @@ def get_args():
 	return parser.parse_args()
 
 def track(target, action):
-	if math.abs(target.x - 0.5) > THRES_MID:
+	if abs(target.x - 0.5) > THRES_MID:
 		if target.x > 0.5:
 			action.turn(30)
 		else:

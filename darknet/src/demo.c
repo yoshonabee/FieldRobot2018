@@ -168,6 +168,7 @@ void *detect_in_thread_no_img(void *ptr) {
     printf("%f", count_img / 20.0);
     printf("\nFPS:%.1f\n",fps);
     printf("Objects:\n\n");
+
     
     FILE *fp;
     fp = fopen("../egg_info.csv", "w");
@@ -263,26 +264,28 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
     det_s = in_s;
 
     fetch_in_thread(0);
-    detect_in_thread(0);
+    detect_in_thread_no_img(0);
+
     det_img = in_img;
     det_s = in_s;
 
     for(j = 0; j < FRAMES/2; ++j){
         fetch_in_thread(0);
-        detect_in_thread(0);
+        detect_in_thread_no_img(0);
         det_img = in_img;
         det_s = in_s;
     }
 
     int count = 0;
+    dont_show = 1;
     if(!prefix && !dont_show){
         cvNamedWindow("Demo", CV_WINDOW_NORMAL);
         cvMoveWindow("Demo", 0, 0);
         cvResizeWindow("Demo", 1352, 1013);
     }
 
-    out_filename = calloc(15, sizeof(char));
-    strcpy(out_filename, "../out02.avi");
+    // out_filename = calloc(15, sizeof(char));
+    // strcpy(out_filename, "../out02.avi");
 
     CvVideoWriter* output_video_writer = NULL;    // cv::VideoWriter output_video;
     if (out_filename && !flag_exit)
@@ -361,6 +364,7 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
             det_img = in_img;
             det_s = in_s;
         }else if (running_mode == 1) {
+
             if(pthread_create(&fetch_thread, 0, fetch_in_thread_caps, cap1)) error("Thread creation failed");
             if(pthread_create(&detect_thread, 0, detect_in_thread_no_img, 0)) error("Thread creation failed");	
 

@@ -33,7 +33,7 @@ def getTarget(filepath):
 
 	for i in eggs:
 		i.print()
-		if math.abs(i.distance - neareat_egg.distance) < 0.001:
+		if abs(i.distance - neareat_egg.distance) < 0.001:
 			if i.distance_to_center < neareat_egg.distance_to_center:
 				neareat_egg = i
 		elif i.distance < neareat_egg.distance:

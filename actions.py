@@ -21,7 +21,7 @@ class Actions():
 		return
 
 	def turn(self, spd):
-		if speed >= 0:
+		if spd >= 0:
 			self.bus.write_i2c_block_data(self.left, ord('F'), [ord(s) for s in str(spd)])
 			self.bus.write_i2c_block_data(self.right, ord('B'), [ord(s) for s in str(spd)])
 		else:

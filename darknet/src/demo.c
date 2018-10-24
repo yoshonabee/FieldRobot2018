@@ -1,3 +1,5 @@
+#include <sys/select>
+
 #include "network.h"
 #include "detection_layer.h"
 #include "region_layer.h"
@@ -138,7 +140,7 @@ void *detect_in_thread(void *ptr)
     //det_img = ipl_images[(demo_index + FRAMES / 2 + 1) % FRAMES];
     //demo_index = (demo_index + 1)%FRAMES;
 
-    // draw_detections_cv_v3(det_img, dets, nboxes, demo_thresh, demo_names, demo_alphabet, demo_classes, demo_ext_output);
+    draw_detections_cv_v3(det_img, dets, nboxes, demo_thresh, demo_names, demo_alphabet, demo_classes, demo_ext_output);
     free_detections(dets, nboxes);
     
     
@@ -308,7 +310,15 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
 
     double before = get_wall_time();
 
-    while(1){
+    fd_set inputs, test;
+    struct timeval tv;
+    tv.tv_sec = 0;
+    tv.tv_usec = 1000;
+
+    FD_ZERO(&inputs);
+    FD_SET(0, &inputs);
+
+    while(!flag_exit){
         ++count;
         if(running_mode == 0){
             if(pthread_create(&fetch_thread, 0, fetch_in_thread, 0)) error("Thread creation failed");
@@ -356,6 +366,10 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
             pthread_join(fetch_thread, 0);
             pthread_join(detect_thread, 0);
 
+            test = inputs;
+            if (select(FD_SETSIZE, &test, NULL, NULL, &tv))
+                flag_exit = 1;
+
             if (flag_exit == 1) break;
 
             if(delay == 0){
@@ -365,8 +379,8 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
             det_s = in_s;
         }else if (running_mode == 1) {
 
-            if(pthread_create(&fetch_thread, 0, fetch_in_thread_caps, cap1)) error("Thread creation failed");
-            if(pthread_create(&detect_thread, 0, detect_in_thread_no_img, 0)) error("Thread creation failed");	
+            if (pthread_create(&fetch_thread, 0, fetch_in_thread_caps, cap1)) error("Thread creation failed");
+            if (pthread_create(&detect_thread, 0, detect_in_thread_no_img, 0)) error("Thread creation failed");	
 
             pthread_join(fetch_thread, 0);
             pthread_join(detect_thread, 0);

@@ -368,6 +368,11 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
             if(pthread_create(&fetch_thread, 0, fetch_in_thread_caps, cap1)) error("Thread creation failed");
             if(pthread_create(&detect_thread, 0, detect_in_thread_no_img, 0)) error("Thread creation failed");	
 
+            if (output_video_writer && show_img) {
+                cvWriteFrame(output_video_writer, show_img);
+                printf("\n cvWriteFrame \n");
+            }
+            
             pthread_join(fetch_thread, 0);
             pthread_join(detect_thread, 0);
             

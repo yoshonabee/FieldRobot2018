@@ -63,7 +63,7 @@ IplImage* show_img;
 
 static int flag_exit;
 static int letter_box = 0;
-static int running_mode = 1;
+static int running_mode = 0;
 static int count_img = 0;
 
 void *fetch_in_thread(void *ptr)

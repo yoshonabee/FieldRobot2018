@@ -284,8 +284,8 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
         cvResizeWindow("Demo", 1352, 1013);
     }
 
-    // out_filename = calloc(15, sizeof(char));
-    // strcpy(out_filename, "../out02.avi");
+    out_filename = calloc(15, sizeof(char));
+    strcpy(out_filename, "../out02.avi");
 
     CvVideoWriter* output_video_writer = NULL;    // cv::VideoWriter output_video;
     if (out_filename && !flag_exit)

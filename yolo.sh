@@ -1,1 +1,2 @@
-./darknet/darknet detector demo darknet/cfg/egg-obj.data darknet/cfg/egg-yolov3-tiny.cfg backup/backup/egg-yolov3-tiny_40000.weights -c 0
+cd darknet/
+./darknet detector demo cfg/egg-obj.data cfg/egg-yolov3-tiny.cfg backup/egg-yolov3-tiny_40000.weights -c 0

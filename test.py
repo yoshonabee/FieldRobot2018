@@ -19,7 +19,7 @@ last_target = None
 # action.start();
 while not mission_complete:
 	target = getTarget(arg.eggs_info_filepath)
-	
+	continue;
 	if target == None:
 		if last_target == None:
 			continue

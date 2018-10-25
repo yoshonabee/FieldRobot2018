@@ -9,7 +9,7 @@ height = 720
 fourcc = cv.VideoWriter_fourcc('M', 'J', 'P', 'G')
 #out = cv.VideoWriter(output_path, fourcc, 20, (width, height))
 
-cap = cv.VideoCapture(0)
+cap = cv.VideoCapture(1)
 cap.set(cv.CAP_PROP_FRAME_WIDTH, width)
 cap.set(cv.CAP_PROP_FRAME_HEIGHT, height)
 
@@ -25,7 +25,7 @@ while(cap.isOpened()):
 		# frame = cv.flip(frame,0)
 		#out.write(frame)
 
-		#cv.imshow('frame',frame)
+		cv.imshow('frame',frame)
 		if cv.waitKey(1) & 0xFF == ord('q'):
 			break
 	else:

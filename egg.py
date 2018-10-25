@@ -22,7 +22,7 @@ def getTarget(filepath):
 
 	eggs = [Egg(float(r[1]), float(r[2]), float(r[3]), float(r[4])) for r in row]
 	f.close()
-
+	print(eggs)
 	if len(eggs) == 0:
 		return None
 

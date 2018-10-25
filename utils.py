@@ -4,7 +4,7 @@ from egg import *
 from actions import Actions
 from time import sleep, time
 
-THRES_MID = 0.1
+THRES_MID = 0.04
 STD_SPEED = 45
 
 def get_args():

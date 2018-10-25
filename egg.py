@@ -22,7 +22,7 @@ def getTarget(filepath):
 
 	eggs = [Egg(float(r[1]), float(r[2]), float(r[3]), float(r[4])) for r in row]
 	f.close()
-	
+
 	if len(eggs) == 0:
 		return None
 
@@ -45,6 +45,7 @@ def same_target_egg(egg, last_egg):
 	if egg.y < last_egg.y:
 		return False
 	elif math.sqrt(4 * (egg.x - last_egg.x) ** 2 + 3 * (egg.y - last_egg.y) ** 2) > THRES_DIS_BETWEEN_EGG:
+		print(math.sqrt(4 * (egg.x - last_egg.x) ** 2 + 3 * (egg.y - last_egg.y) ** 2))
 		return False
 	else:
 		return True

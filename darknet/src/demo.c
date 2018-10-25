@@ -146,15 +146,12 @@ void *detect_in_thread(void *ptr)
     for (int obj = 0; obj < nboxes; obj++) {
         if (dets[obj].prob[0] > demo_thresh) {
             printf("%f ", dets[obj].prob[0]);
-            printf("class:%d x:%.4f y:%.4f w:%.4f j:%.4f\n", dets[obj].classes, dets[obj].bbox.x, dets[obj].bbox.y, dets[obj].bbox.w, dets[obj].bbox.h);
-            printf("\ngood\n");
-            fprintf(fp, "%d,%.4f,%.4f", dets[obj].classes, dets[obj].bbox.x, dets[obj].bbox.y);
-            fprintf(fp, ",%.4f,%.4f\n", dets[obj].bbox.w, dets[obj].bbox.h);
+            printf("class:%d x:%f y:%f w:%f j:%f\n", dets[obj].classes, dets[obj].bbox.x, dets[obj].bbox.y, dets[obj].bbox.w, dets[obj].bbox.h);
+            fprintf(fp, "%d,%f,%f,%f,%f\n", dets[obj].classes, dets[obj].bbox.x, dets[obj].bbox.y, dets[obj].bbox.w, dets[obj].bbox.h);
         }
     }
     
     fclose(fp);
-
     draw_detections_cv_v3(det_img, dets, nboxes, demo_thresh, demo_names, demo_alphabet, demo_classes, demo_ext_output);
     free_detections(dets, nboxes);
     
@@ -301,7 +298,7 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
         cvResizeWindow("Demo", 1352, 1013);
     }
 
-    out_filename = calloc(15, sizeof(char));
+    out_filename = calloc(20, sizeof(char));
     strcpy(out_filename, "../../out02.avi");
 
     CvVideoWriter* output_video_writer = NULL;    // cv::VideoWriter output_video;

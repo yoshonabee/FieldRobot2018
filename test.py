@@ -32,7 +32,7 @@ while not mission_complete:
 	if last_target is not None:
 		if not same_target_egg(target, last_target):
 			action.forward(60, 60)
-			sleep(5)
+			# sleep(5)
 			egg_eaten += 1
 
 			if (egg_eaten == 1):

@@ -46,6 +46,7 @@ def same_target_egg(egg, last_egg):
 		return False
 	elif math.sqrt(4 * (egg.x - last_egg.x) ** 2 + 3 * (egg.y - last_egg.y) ** 2) > THRES_DIS_BETWEEN_EGG:
 		print(math.sqrt(4 * (egg.x - last_egg.x) ** 2 + 3 * (egg.y - last_egg.y) ** 2))
+		exit()
 		return False
 	else:
 		return True

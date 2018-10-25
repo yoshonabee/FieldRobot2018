@@ -1,5 +1,3 @@
-#include <sys/select>
-
 #include "network.h"
 #include "detection_layer.h"
 #include "region_layer.h"
@@ -15,6 +13,7 @@
 #include "gettimeofday.h"
 #else
 #include <sys/time.h>
+#include <sys/select.h>
 #endif
 
 #define FRAMES 1

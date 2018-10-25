@@ -147,6 +147,7 @@ void *detect_in_thread(void *ptr)
         if (dets[obj].prob[0] > demo_thresh) {
             printf("%f ", dets[obj].prob[0]);
             printf("class:%d x:%.4f y:%.4f w:%.4f j:%.4f\n", dets[obj].classes, dets[obj].bbox.x, dets[obj].bbox.y, dets[obj].bbox.w, dets[obj].bbox.h);
+            printf("\ngood\n");
             fprintf(fp, "%d,%.4f,%.4f", dets[obj].classes, dets[obj].bbox.x, dets[obj].bbox.y);
             fprintf(fp, ",%.4f,%.4f\n", dets[obj].bbox.w, dets[obj].bbox.h);
         }

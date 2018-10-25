@@ -7,7 +7,7 @@ output_path = sys.argv[2]
 
 video = cv.VideoCapture(video_path)
 
-image_name, image_num = 110, 0
+image_name, image_num = 0, 0
 
 if video.isOpened() is False:
 	print('Invalid Path, exiting...')

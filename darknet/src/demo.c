@@ -369,7 +369,7 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
 
             // save video file
             if (output_video_writer && show_img) {
-                cvWriteFrame(output_video_writer, det_img);
+                cvWriteFrame(output_video_writer, show_img);
                 printf("\n cvWriteFrame \n");
             }
 

@@ -147,12 +147,13 @@ void *detect_in_thread(void *ptr)
         if (dets[obj].prob[0] > demo_thresh) {
             printf("%f ", dets[obj].prob[0]);
             printf("class:%d x:%f y:%f w:%f j:%f\n", dets[obj].classes, dets[obj].bbox.x, dets[obj].bbox.y, dets[obj].bbox.w, dets[obj].bbox.h);
-            fprintf(fp, "%d,%f,%f,%f,%f\n", dets[obj].classes, dets[obj].bbox.x, dets[obj].bbox.y, dets[obj].bbox.w, dets[obj].bbox.h);
+            fprintf(fp, "%d,%f,%f", dets[obj].classes, dets[obj].bbox.x, dets[obj].bbox.y);
+            fprintf(fp, ",%f,%f\n", dets[obj].bbox.w, dets[obj].bbox.h);
         }
     }
     
     fclose(fp);
-    
+
     draw_detections_cv_v3(det_img, dets, nboxes, demo_thresh, demo_names, demo_alphabet, demo_classes, demo_ext_output);
     free_detections(dets, nboxes);
     

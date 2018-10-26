@@ -19,7 +19,7 @@ while video.isOpened():
 	ret, frame = video.read()
 
 	if ret:
-		if image_num % 10 == 0:
+		if image_num % 20 == 0:
 			cv.imwrite(output_path + str(image_name) + '.jpg', frame)
 			image_name += 1
 	else:

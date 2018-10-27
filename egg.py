@@ -26,20 +26,21 @@ def getTarget(filepath):
 	if len(eggs) == 0:
 		return None
 
-	neareat_egg = Egg(0, 0, 0.001, 0.001)
-
 	print("\033[2J")
 	print("\033[1;1H")
 
+	neareat_egg = None;
 	for i in eggs:
 		i.print()
-		if abs(i.distance - neareat_egg.distance) < 0.001:
-			if i.distance_to_center < neareat_egg.distance_to_center:
-				neareat_egg = i
-		elif i.distance < neareat_egg.distance:
+		if neareat_egg == None:
+			neareat_egg = i
+
+		if (i.y > neareat_egg.y):
 			neareat_egg = i
 
 	return neareat_egg
+
+		
 
 def same_target_egg(egg, last_egg):
 	if egg.y < last_egg.y:

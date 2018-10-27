@@ -59,29 +59,31 @@ void setup() {
 
 void loop() {
   if (start == '1') {
+    analogWrite(MotorA, 100);
+    analogWrite(MotorB, 0);
     if((millis()-lastMilli) >= LOOPTIME) {
-        lastMilli = millis();
-        getMotorData();
-        PWM_val = updatePid();
+        // lastMilli = millis();
+        // getMotorData();
+        // PWM_val = updatePid();
     
-        analogWrite(MotorA, PWM_val);
-        digitalWrite(MotorB, LOW);
+        // analogWrite(MotorA, PWM_val);
+        // digitalWrite(MotorB, LOW);
   
-        color = get_color();
-        if (color == 1) {
-          cat.write(120);
-          delay(2000);
-        } else if (color == 2) {
-          cat.write(60);
-          delay(2000);
-        }
+        // color = get_color();
+        // if (color == 1) {
+        //   cat.write(120);
+        //   delay(2000);
+        // } else if (color == 2) {
+        //   cat.write(60);
+        //   delay(2000);
+        // }
         
-        cat.write(90);
+        // cat.write(90);
     }
   }
 }
 
-int  get_color() {
+int get_color() {
   digitalWrite(S2,LOW);
   digitalWrite(S3,LOW);
   red = pulseIn(sensorOut, LOW);
@@ -136,4 +138,3 @@ void receiveEvent() {
   if (Wire.available())
     start = Wire.read();
 }
-

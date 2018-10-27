@@ -17,6 +17,13 @@ def get_args():
 
 	return parser.parse_args()
 
+def yolo(c):
+	f = open('command', 'w')
+	f.write(str(c)+'\n')
+	f.close()
+	return
+
+
 def track(target, action):
 	if abs(target.x - 0.5) > THRES_MID:
 		if target.x > 0.5:

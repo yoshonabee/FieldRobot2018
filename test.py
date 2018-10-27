@@ -3,6 +3,7 @@ from egg import *
 from utils import *
 from actions import Actions
 from time import sleep, time
+from que import Queue
 
 ADDR_LEFT = 0x04
 ADDR_RIGHT = 0x08
@@ -16,34 +17,42 @@ egg_eaten = 0
 mission_complete = False
 last_target = None
 
+targets = Queue(5)
+
 # action.start();
+
 while not mission_complete:
-	target = getTarget(arg.eggs_info_filepath)
-	continue;
-	if target == None:
-		if last_target == None:
-			continue
-		else:
-			target = last_target
+	targets.add(getTarget(arg.eggs_info_filepath))
+	
+	if targets.allNone(): continue
 
-	print("\n\n\n\n")
-	target.print()
+	target = targets.get()
+	
+	if target.y - last_target.y > 0.5
+	# if target == None:
+	# 	if last_target == None:
+	# 		continue
+	# 	else:
+	# 		target = last_target
 
-	if last_target is not None:
-		if not same_target_egg(target, last_target):
-			action.forward(60, 60)
-			# sleep(5)
-			egg_eaten += 1
+	# print("\n\n\n\n")
+	# target.print()
 
-			if (egg_eaten == 1):
-				mission_complete = True
+	# if last_target is not None:
+	# 	if not same_target_egg(target, last_target):
+	# 		action.forward(60, 60)
+	# 		# sleep(5)
+	# 		egg_eaten += 1
 
-			last_target = None
-		else:
-			track(target, action)
-			last_target = target
-	else:
-		track(target, action)
-		last_target = target
+	# 		if (egg_eaten == 1):
+	# 			mission_complete = True
 
+	# 		last_target = None
+	# 	else:
+	# 		track(target, action)
+	# 		last_target = target
+	# else:
+	# 	track(target, action)
+	# 	last_target = target
+	last_target = target
 action.forward(0, 0)

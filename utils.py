@@ -1,4 +1,3 @@
-from argparse import ArgumentParser
 import math
 from egg import *
 from actions import Actions
@@ -8,19 +7,26 @@ THRES_MID = 0.04
 STD_SPEED = 60
 
 def yolo(c):
-	f = open('command', 'w')
+	f = open('data/command', 'w')
 	f.write(str(c)+'\n')
 	f.close()
 	return
 
 
 def track(target, action):
-	if abs(target.x - 0.5) > THRES_MID:
-		if target.x > 0.5:
-			action.turn(30)
-		else:
-			action.turn(-30)
+	if target.cam == 1:
+		action.turn(-60)
+		sleep(1.5)
+		target = getTarget()
+		while target.cam != 0:
+			target = getTarget()
+	elif target.cam == 2:
+		action.turn(60)
+		sleep(1.5)
+		target = getTarget()
+		while target.cam != 0:
+			target = getTarget()
 	else:
 		loss = target.x - 0.5
-		action.forward(STD_SPEED + loss * 5, STD_SPEED - loss * 5)
-
+		action.forward(STD_SPEED + loss * 10, STD_SPEED - loss * 5)
+	return target

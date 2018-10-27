@@ -12,4 +12,4 @@ ADDR_RIGHT = 0x08
 bus.write_i2c_block_data(ADDR_LEFT, ord('F'), [ord(s) for s in str(60)])
 bus.write_i2c_block_data(ADDR_RIGHT, ord('F'), [ord(s) for s in str(60)])
 print(60, 60)
-sleep(10)
+sleep(5)

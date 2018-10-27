@@ -59,8 +59,8 @@ void setup() {
 
 void loop() {
   if (start == '0') {
-    analogWrite(MotorA, 120);
-    analogWrite(MotorB, 0);
+    // analogWrite(MotorA, 120);
+    // analogWrite(MotorB, 0);
     if((millis()-lastMilli) >= LOOPTIME) {
         // lastMilli = millis();
         // getMotorData();
@@ -69,7 +69,8 @@ void loop() {
         // analogWrite(MotorA, PWM_val);
         // digitalWrite(MotorB, LOW);
   
-        // color = get_color();
+        color = get_color();
+        delay(100)
         // if (color == 1) {
         //   cat.write(120);
         //   delay(2000);
@@ -87,25 +88,34 @@ int get_color() {
   digitalWrite(S2,LOW);
   digitalWrite(S3,LOW);
   red = pulseIn(sensorOut, LOW);
-  Serial.print("R= ");
-  Serial.print(red);
-  Serial.print("  ");
+
+  if (Serial.available()) {
+    Serial.print("R= ");
+    Serial.print(red);
+    Serial.print("  ");
+  }
   delay(10);
 
   digitalWrite(S2,HIGH);
   digitalWrite(S3,HIGH);
   green = pulseIn(sensorOut, LOW);
-  Serial.print("G= ");
-  Serial.print(green);
-  Serial.print("  ");
+
+  if (Serial.available()) {
+    Serial.print("G= ");
+    Serial.print(green);
+    Serial.print("  ");
+  }
   delay(10);
 
   digitalWrite(S2,LOW);
   digitalWrite(S3,HIGH);
   blue = pulseIn(sensorOut, LOW);
-  Serial.print("B= ");
-  Serial.print(blue);
-  Serial.println("  ");
+
+  if (Serial.available()) {
+    Serial.print("B= ");
+    Serial.print(blue);
+    Serial.println("  ");
+  }
   delay(10);
 
   if (red < 45 && green < 45 && blue < 45) return 1;

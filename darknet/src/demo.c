@@ -1,5 +1,3 @@
-static int running_mode = 0;
-
 #include "network.h"
 #include "detection_layer.h"
 #include "region_layer.h"
@@ -66,6 +64,7 @@ IplImage* show_img;
 static int flag_exit;
 static int letter_box = 0;
 static int count_img = 0;
+static int running_mode = 0;
 
 void *fetch_in_thread(void *ptr)
 {
@@ -106,7 +105,7 @@ void *fetch_in_thread_caps(CvCapture *c)
 	return 0;
 }
 
-void *detect_in_thread(void *ptr)
+void *detect_in_thread(int& c_num)
 {
 	float nms = .45;    // 0.4F
 
@@ -144,9 +143,9 @@ void *detect_in_thread(void *ptr)
 	
 	for (int obj = 0; obj < nboxes; obj++) {
 		if (dets[obj].prob[0] > demo_thresh) {
-			printf("%f ", dets[obj].prob[0]);
-			printf("class:%d x:%f y:%f w:%f j:%f\n", dets[obj].classes, dets[obj].bbox.x, dets[obj].bbox.y, dets[obj].bbox.w, dets[obj].bbox.h);
-			fprintf(fp, "%d,%f,%f,%f,%f\n", dets[obj].classes, dets[obj].bbox.x, dets[obj].bbox.y, dets[obj].bbox.w, dets[obj].bbox.h);
+			printf("%f% ", dets[obj].prob[0] * 100);
+			printf("x:%f y:%f w:%f j:%f\n", dets[obj].bbox.x, dets[obj].bbox.y, dets[obj].bbox.w, dets[obj].bbox.h);
+			fprintf(fp, "%d, %f,%f,%f,%f\n", c_num, dets[obj].bbox.x, dets[obj].bbox.y, dets[obj].bbox.w, dets[obj].bbox.h);
 		}
 	}
 	
@@ -154,11 +153,10 @@ void *detect_in_thread(void *ptr)
 	draw_detections_cv_v3(det_img, dets, nboxes, demo_thresh, demo_names, demo_alphabet, demo_classes, demo_ext_output);
 	free_detections(dets, nboxes);
 	
-	
 	return 0;
 }
 
-void *detect_in_thread_no_img(void *ptr) {
+void *detect_in_thread_no_img(int& c_num) {
 	float nms = .45;    // 0.4F
 
 	layer l = net.layers[net.n-1];
@@ -188,9 +186,52 @@ void *detect_in_thread_no_img(void *ptr) {
 	
 	for (int obj = 0; obj < nboxes; obj++) {
 		if (dets[obj].prob[0] > demo_thresh) {
-			printf("%f ", dets[obj].prob[0]);
-			printf("class:%d x:%f y:%f w:%f j:%f\n", dets[obj].classes, dets[obj].bbox.x, dets[obj].bbox.y, dets[obj].bbox.w, dets[obj].bbox.h);
-			fprintf(fp, "%d,%f,%f,%f,%f\n", dets[obj].classes, dets[obj].bbox.x, dets[obj].bbox.y, dets[obj].bbox.w, dets[obj].bbox.h);
+			printf("%f% ", dets[obj].prob[0] * 100);
+			printf("x:%f y:%f w:%f j:%f\n", dets[obj].bbox.x, dets[obj].bbox.y, dets[obj].bbox.w, dets[obj].bbox.h);
+			fprintf(fp, "%d, %f,%f,%f,%f\n", c_num, dets[obj].bbox.x, dets[obj].bbox.y, dets[obj].bbox.w, dets[obj].bbox.h);
+		}
+	}
+	
+	fclose(fp);
+	
+	free_detections(dets, nboxes);
+
+	return 0;
+}
+
+void *detect_in_thread_no_img_con(int& c_num) {
+	float nms = .45;    // 0.4F
+
+	layer l = net.layers[net.n-1];
+	float *X = det_s.data;
+	float *prediction = network_predict(net, X);
+
+	memcpy(predictions[demo_index], prediction, l.outputs*sizeof(float));
+	mean_arrays(predictions, FRAMES, l.outputs, avg);
+	l.output = avg;
+
+	free_image(det_s);
+
+	int nboxes = 0;
+	detection *dets = NULL; 
+	dets = get_network_boxes(&net, det_s.w, det_s.h, demo_thresh, demo_thresh, 0, 1, &nboxes, 0); // resized
+	if (nms) do_nms_sort(dets, nboxes, l.classes, nms);
+
+	printf("\033[2J");
+	printf("\033[1;1H");
+	printf("%f", count_img / 20.0);
+	printf("\nFPS:%.1f\n",fps);
+	printf("Objects:\n\n");
+
+	
+	FILE *fp;
+	fp = fopen("../data/egg_info.csv", "a");
+	
+	for (int obj = 0; obj < nboxes; obj++) {
+		if (dets[obj].prob[0] > demo_thresh) {
+			printf("%f% ", dets[obj].prob[0] * 100);
+			printf("x:%f y:%f w:%f j:%f\n", dets[obj].bbox.x, dets[obj].bbox.y, dets[obj].bbox.w, dets[obj].bbox.h);
+			fprintf(fp, "%d, %f,%f,%f,%f\n", c_num, dets[obj].bbox.x, dets[obj].bbox.y, dets[obj].bbox.w, dets[obj].bbox.h);
 		}
 	}
 	
@@ -240,13 +281,13 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
 		cap1 = get_capture_video_stream(filename);
 //#endif
 	}else{
-		printf("Webcam index: %d\n", cam_index);
-//#ifdef CV_VERSION_EPOCH    // OpenCV 2.x
-//        cap = cvCaptureFromCAM(cam_index);
-//#else                    // OpenCV 3.x
 		cpp_video_capture = 1;
-		cap1 = get_capture_webcam(cam_index);
-//#endif
+		printf("Webcam index: %d\n", 0);
+		cap1 = get_capture_webcam(0);
+		printf("Webcam index: %d\n", 1);
+		cap2 = get_capture_webcam(1);
+		printf("Webcam index: %d\n", 2);
+		cap3 = get_capture_webcam(2);
 	}
 
 	if (!cap1) {
@@ -329,8 +370,14 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
 	FD_ZERO(&inputs);
 	FD_SET(0, &inputs);
 
+	FILE *cmd;
 	while(!flag_exit){
 		++count;
+
+		cmd = fopen("../data/command", "r");
+		fscanf(cmd, "%d", &running_mode);
+		fclose(cmd)
+		
 		if(running_mode == 0){
 			if(pthread_create(&fetch_thread, 0, fetch_in_thread, 0)) error("Thread creation failed");
 			if(pthread_create(&detect_thread, 0, detect_in_thread, 0)) error("Thread creation failed");
@@ -392,14 +439,54 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
 
 			if (pthread_create(&fetch_thread, 0, fetch_in_thread_caps, cap1)) error("Thread creation failed");
 			if (pthread_create(&detect_thread, 0, detect_in_thread_no_img, 0)) error("Thread creation failed");	
-
 			pthread_join(fetch_thread, 0);
 			pthread_join(detect_thread, 0);
-			
-			if (output_video_writer && det_img) {
-				cvWriteFrame(output_video_writer, det_img);
-				printf("\n cvWriteFrame \n");
-			}
+
+			// if (output_video_writer && det_img) {
+			// 	cvWriteFrame(output_video_writer, det_img);
+			// 	printf("\n cvWriteFrame \n");
+			// }
+
+			test = inputs;
+			if (select(FD_SETSIZE, &test, NULL, NULL, &tv))
+				flag_exit = 1;
+
+			cvReleaseImage(&det_img);
+			det_img = in_img;
+			det_s = in_s;
+		} else if (running_mode == 2) {
+
+			if (pthread_create(&fetch_thread, 0, fetch_in_thread_caps, cap1)) error("Thread creation failed");
+			if (pthread_create(&detect_thread, 0, detect_in_thread_no_img, 0)) error("Thread creation failed");	
+			pthread_join(fetch_thread, 0);
+			pthread_join(detect_thread, 0);
+
+			cvReleaseImage(&det_img);
+			det_img = in_img;
+			det_s = in_s;
+
+			if (pthread_create(&fetch_thread, 0, fetch_in_thread_caps, cap2)) error("Thread creation failed");
+			if (pthread_create(&detect_thread, 0, detect_in_thread_no_img_con, 1)) error("Thread creation failed");	
+			pthread_join(fetch_thread, 0);
+			pthread_join(detect_thread, 0);
+
+			cvReleaseImage(&det_img);
+			det_img = in_img;
+			det_s = in_s;
+
+			if (pthread_create(&fetch_thread, 0, fetch_in_thread_caps, cap3)) error("Thread creation failed");
+			if (pthread_create(&detect_thread, 0, detect_in_thread_no_img_con, 2)) error("Thread creation failed");	
+			pthread_join(fetch_thread, 0);
+			pthread_join(detect_thread, 0);
+
+			// if (output_video_writer && det_img) {
+			// 	cvWriteFrame(output_video_writer, det_img);
+			// 	printf("\n cvWriteFrame \n");
+			// }
+
+			test = inputs;
+			if (select(FD_SETSIZE, &test, NULL, NULL, &tv))
+				flag_exit = 1;
 
 			cvReleaseImage(&det_img);
 			det_img = in_img;
@@ -455,4 +542,3 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
 	fprintf(stderr, "Demo needs OpenCV for webcam images.\n");
 }
 #endif
-

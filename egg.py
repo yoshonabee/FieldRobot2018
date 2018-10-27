@@ -3,7 +3,8 @@ import math
 import numpy as np
 
 class Egg():
-	def __init__(self, x, y, w, h):
+	def __init__(self, cam, x, y, w, h):
+		self.cam = cam
 		self.x = x
 		self.y = y
 		self.w = w
@@ -11,13 +12,13 @@ class Egg():
 		self.data = np.array([x, y, w, h]).astype(np.float32)
 		
 	def print(self):
-		print('x:{0} y:{1} width:{2} height:{3} distance:{4}'.format(self.x, self.y, self.w, self.h, self.distance))
+		print('Cam:{4} x:{0} y:{1} width:{2} height:{3}'.format(self.x, self.y, self.w, self.h, self.cam))
 
 def getTarget():
 	f = open('data/egg_info.csv', 'r')
 	row = csv.reader(f, delimiter=',')
 
-	eggs = [Egg(float(r[1]), float(r[2]), float(r[3]), float(r[4])) for r in row]
+	eggs = [Egg(int(r[0]), float(r[1]), float(r[2]), float(r[3]), float(r[4])) for r in row]
 	f.close()
 	
 	if len(eggs) == 0:

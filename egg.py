@@ -1,7 +1,6 @@
 import csv
 import math
-
-THRES_DIS_BETWEEN_EGG = 0.1
+import numpy as np
 
 class Egg():
 	def __init__(self, x, y, w, h):
@@ -9,15 +8,13 @@ class Egg():
 		self.y = y
 		self.w = w
 		self.h = h
-		self.area = w * h
-		self.distance_to_center = math.sqrt(4 * (x - 0.5) ** 2 + 3 * (y - 0.5) ** 2)
-		self.distance = math.sqrt(self.area) + self.distance_to_center + 0
+		self.data = np.array([x, y, w, h]).astype(np.float32)
 		
 	def print(self):
 		print('x:{0} y:{1} width:{2} height:{3} distance:{4}'.format(self.x, self.y, self.w, self.h, self.distance))
 
-def getTarget(filepath):
-	f = open(filepath, 'r')
+def getTarget():
+	f = open('data/egg_info.csv', 'r')
 	row = csv.reader(f, delimiter=',')
 
 	eggs = [Egg(float(r[1]), float(r[2]), float(r[3]), float(r[4])) for r in row]
@@ -39,16 +36,3 @@ def getTarget(filepath):
 			neareat_egg = i
 
 	return neareat_egg
-
-		
-
-def same_target_egg(egg, last_egg):
-	if egg.y < last_egg.y:
-		return False
-	elif math.sqrt(4 * (egg.x - last_egg.x) ** 2 + 3 * (egg.y - last_egg.y) ** 2) > THRES_DIS_BETWEEN_EGG:
-		print(math.sqrt(4 * (egg.x - last_egg.x) ** 2 + 3 * (egg.y - last_egg.y) ** 2))
-		exit()
-		return False
-	else:
-		return True
-		

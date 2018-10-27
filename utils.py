@@ -5,17 +5,7 @@ from actions import Actions
 from time import sleep, time
 
 THRES_MID = 0.04
-STD_SPEED = 45
-
-def get_args():
-	parser = ArgumentParser(prog='python3 fieldRobot.py')
-
-	parser.add_argument('eggs_info_filepath', help='positional argument 1')
-	parser.add_argument('-r', '--optional-arg', help='numbers of remain eggs', dest='remain', default=None)
-
-	# parser.print_help()
-
-	return parser.parse_args()
+STD_SPEED = 60
 
 def yolo(c):
 	f = open('command', 'w')

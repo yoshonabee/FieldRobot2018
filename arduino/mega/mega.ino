@@ -34,7 +34,7 @@ int red = 0, green = 0, blue = 0, color;
 Servo cat;
 
 void setup() {
-  Wire.begin(0x04);
+  Wire.begin(0x0c);
   Serial.begin(115200);
   Wire.onReceive(receiveEvent);
 
@@ -45,7 +45,7 @@ void setup() {
   pinMode(MotorB, OUTPUT);
   pinMode(EncoderA, INPUT_PULLUP);
   pinMode(EncoderB, INPUT_PULLUP);
-  attachInterrupt(1, rencoder, FALLING);
+  // attachInterrupt(1, rencoder, FALLING);
 
   pinMode(S0, OUTPUT);
   pinMode(S1, OUTPUT);
@@ -58,8 +58,8 @@ void setup() {
 }
 
 void loop() {
-  if (start == '1') {
-    analogWrite(MotorA, 100);
+  if (start == '0') {
+    analogWrite(MotorA, 120);
     analogWrite(MotorB, 0);
     if((millis()-lastMilli) >= LOOPTIME) {
         // lastMilli = millis();

@@ -55,7 +55,6 @@ def fit(model, dataset, optim, loss_function, batch, epochs):
 	for epoch in range(epochs):
 		t1 = time.time()
 		for i, (x, y) in enumerate(dataLoader):
-
 			optim.zero_grad()
 			output = model(x)
 			loss = loss_function(output, y)
@@ -68,13 +67,27 @@ def fit(model, dataset, optim, loss_function, batch, epochs):
 
 	return history
 
-x, y = readData(FILEPATH)
-data_train = Data(x, y)
+def loadModel():
+	return SE().load_state_dict(torch.load('data/params_SE.pkl'))
 
-model = SE()
-optim = Adam(model.parameters(), lr=LR, weight_decay=0.001)
-loss_function = nn.CrossEntropyLoss()
+def mergeData(x1, x2):
+	x = np.concatenate((x1, x2), axis=0)
+	x = torch.from_numpy(x)
+	return x
 
-fit(model, data_train, optim, loss_function, BATCH_SIZE, EPOCH)
+def result(out):
+	if out.data.numpy()[0] >= 0.5:
+		return False
+	return True
 
-torch.save(model.state_dict(), 'data/params_SE.pkl')
+if __name__ == '__main__':
+	x, y = readData(FILEPATH)
+	data_train = Data(x, y)
+
+	model = SE()
+	optim = Adam(model.parameters(), lr=LR, weight_decay=0.001)
+	loss_function = nn.CrossEntropyLoss()
+
+	fit(model, data_train, optim, loss_function, BATCH_SIZE, EPOCH)
+
+	torch.save(model.state_dict(), 'data/params_SE.pkl')

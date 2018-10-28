@@ -28,5 +28,5 @@ def track(target, action):
 		action.forward(40, 40)
 	else:
 		loss = target.x - 0.5
-		action.forward(STD_SPEED + loss * 10, STD_SPEED - loss * 5)
+		action.forward(STD_SPEED + loss * 50, STD_SPEED - loss * 50)
 	return target

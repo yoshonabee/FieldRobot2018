@@ -105,7 +105,7 @@ void *fetch_in_thread_caps(CvCapture *c)
 	return 0;
 }
 
-void *detect_in_thread(int& c_num)
+void *detect_in_thread(int c_num)
 {
 	float nms = .45;    // 0.4F
 
@@ -156,7 +156,7 @@ void *detect_in_thread(int& c_num)
 	return 0;
 }
 
-void *detect_in_thread_no_img(int& c_num) {
+void *detect_in_thread_no_img(int c_num) {
 	float nms = .45;    // 0.4F
 
 	layer l = net.layers[net.n-1];
@@ -199,7 +199,7 @@ void *detect_in_thread_no_img(int& c_num) {
 	return 0;
 }
 
-void *detect_in_thread_no_img_con(int& c_num) {
+void *detect_in_thread_no_img_con(int c_num) {
 	float nms = .45;    // 0.4F
 
 	layer l = net.layers[net.n-1];
@@ -376,7 +376,7 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
 
 		cmd = fopen("../data/command", "r");
 		fscanf(cmd, "%d", &running_mode);
-		fclose(cmd)
+		fclose(cmd);
 		
 		if(running_mode == 0){
 			if(pthread_create(&fetch_thread, 0, fetch_in_thread, 0)) error("Thread creation failed");
@@ -415,7 +415,7 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
 
 			// save video file
 			if (output_video_writer && show_img) {
-				cvWriteFrame(output_video_writer, det_img);
+				cvWriteFrame(output_video_writer, show_img);
 				printf("\n cvWriteFrame \n");
 			}
 

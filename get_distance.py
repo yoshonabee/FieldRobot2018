@@ -23,7 +23,7 @@ targets = Queue(5)
 # action.start();
 se = loadModel()
 
-start_time = time.time()
+start_time = time()
 last_time = start_time
 
 while not mission_complete:
@@ -41,13 +41,16 @@ while not mission_complete:
 	
 	target = targets.get()
 	if target is not None:
-		track(target, action)
+		last_target = track(target, action)
 	else:
+		print("no")
 		action.forward(0, 0)
-
-	if time.time() - last_time > 0.1:
-		print('time: {0}::{1},{2},{3},{4},{5},{6},{7},{8}'.format(time.time() - start_time), target.x, target.y, target.w, target.h, last_target.x, last_target.y, last_target.w, last_target.h)
-		last_time = time.time()
+		sleep(0.025)
+		continue
+	
+	if time() - last_time > 0.1:
+		print('time: {0}::{1},{2},{3},{4},{5},{6},{7},{8}'.format(time() - start_time, target.x, target.y, target.w, target.h, last_target.x, last_target.y, last_target.w, last_target.h))
+		last_time = time()
 
 	# if same_egg(se(mergeData(target.data, last_target.data))):
 	# 	last_target = track(target, action)

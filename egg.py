@@ -24,12 +24,12 @@ def getTarget():
 	if len(eggs) == 0:
 		return None
 
-	print("\033[2J")
-	print("\033[1;1H")
+	#print("\033[2J")
+	#print("\033[1;1H")
 
 	neareat_egg = None;
 	for i in eggs:
-		i.print()
+		#i.print()
 		if neareat_egg == None:
 			neareat_egg = i
 

@@ -35,10 +35,18 @@ while not mission_complete:
 		continue
 
 	target = targets.get()
-	if target.cam != 0:
-		last_target = track(target, action)
 	yolo(1)
 	
+	if target.cam != 0:
+		action.forward(0, 0)
+		sleep(0.2)
+		last_target = track(target, action)
+	
+	if last_target is None:
+		last_target = target
+		sleep(0.03)
+		continue
+			
 	if time.time() - last_time > 0.1:
 		print('time: {0}::{1},{2},{3},{4},{5},{6},{7},{8}'.format(time.time() - start_time), target.x, target.y, target.w, target.h, last_target.x, last_target.y, last_target.w, last_target.h)
 		last_time = time.time()
@@ -46,16 +54,25 @@ while not mission_complete:
 	if same_egg(se(mergeData(target.data, last_target.data))):
 		last_target = track(target, action)
 	else:
+		diff = True
 		for i in range(5):
 			sleep(0.1)
 			targets.add(getTarget())
+
+			if target.allNone():
+				continue
+
 			target = targets.get()
 			if result(se(mergeData(target.data, last_target.data))):
+				diff = False
 				last_target = track(target, action)
 				break;
 
-		yolo(2)
-		sleep(0.1)
-		targets.clear()
+		if diff:
+			yolo(2)
+			sleep(0.07)
+			targets.clear()
+			last_target = None
 
+	sleep(0.03)
 action.forward(0, 0)

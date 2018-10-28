@@ -37,7 +37,10 @@ while not mission_complete:
 	target = targets.get()
 	if target.cam != 0:
 		last_target = track(target, action)
-	yolo(1)
+		yolo(1)
+		sleep(0.1)
+		continue
+	
 	
 	if time.time() - last_time > 0.1:
 		print('time: {0}::{1},{2},{3},{4},{5},{6},{7},{8}'.format(time.time() - start_time), target.x, target.y, target.w, target.h, last_target.x, last_target.y, last_target.w, last_target.h)
@@ -55,7 +58,8 @@ while not mission_complete:
 				break;
 
 		yolo(2)
-		sleep(0.1)
+		sleep(0.07)
 		targets.clear()
 
+	sleep(0.03)
 action.forward(0, 0)

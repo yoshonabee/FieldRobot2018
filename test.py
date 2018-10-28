@@ -1,6 +1,6 @@
 import math
 import torch
-from SE import *
+# from SE import *
 from egg import *
 from utils import *
 from actions import Actions
@@ -20,10 +20,10 @@ last_target = None
 
 targets = Queue(5)
 
-# action.start();
+action.start();
 se = loadModel()
 
-start_time = time.time()
+start_time = time()
 last_time = start_time
 
 while not mission_complete:
@@ -46,12 +46,12 @@ while not mission_complete:
 		last_target = target
 		sleep(0.03)
 		continue
-			
-	if time.time() - last_time > 0.1:
-		print('time: {0}::{1},{2},{3},{4},{5},{6},{7},{8}'.format(time.time() - start_time), target.x, target.y, target.w, target.h, last_target.x, last_target.y, last_target.w, last_target.h)
-		last_time = time.time()
 
-	if same_egg(se(mergeData(target.data, last_target.data))):
+	if time() - last_time > 0.1:
+		print('time: {0}::{1},{2},{3},{4},{5},{6},{7},{8}'.format(time() - start_time, target.x, target.y, target.w, target.h, last_target.x, last_target.y, last_target.w, last_target.h))
+		last_time = time()
+
+	if last_target.y <= target.y:
 		last_target = track(target, action)
 	else:
 		diff = True
@@ -63,7 +63,7 @@ while not mission_complete:
 				continue
 
 			target = targets.get()
-			if result(se(mergeData(target.data, last_target.data))):
+			if last_target.y <= target:
 				diff = False
 				last_target = track(target, action)
 				break;

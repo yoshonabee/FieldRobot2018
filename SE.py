@@ -9,9 +9,9 @@ from torch.optim import Adam
 from torch.utils.data import Dataset, DataLoader
 
 FILEPATH = 'data/distance_data.csv'
-LR = 0.001
-BATCH_SIZE = 32
-EPOCH = 500
+LR = 0.00001
+BATCH_SIZE = 2
+EPOCH = 10000
 
 def readData(filepath):
 	f = open(filepath, 'r')
@@ -82,6 +82,9 @@ def result(out):
 
 if __name__ == '__main__':
 	x, y = readData(FILEPATH)
+	print(x)
+	print(y)
+	# exit()
 	data_train = Data(x, y)
 
 	model = SE()

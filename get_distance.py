@@ -1,6 +1,5 @@
 import math
 import torch
-from SE import *
 from egg import *
 from utils import *
 from actions import Actions

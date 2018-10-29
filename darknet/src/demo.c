@@ -410,8 +410,9 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
 		cmd = fopen("../data/command", "r");
 		fscanf(cmd, "%d", &running_mode);
 		fclose(cmd);
-		
+		printf("%d\n", running_mode);	
 		if(running_mode == 0){
+			printf("good\n");
 			if(pthread_create(&fetch_thread, 0, fetch_in_thread, 0)) error("Thread creation failed");
 			if(pthread_create(&detect_thread, 0, detect_in_thread, 0)) error("Thread creation failed");
 

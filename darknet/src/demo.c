@@ -123,9 +123,9 @@ void *fetch_in_thread3(void *ptr)
 	//in = get_image_from_stream(cap);
 	int dont_close_stream = 0;    // set 1 if your IP-camera periodically turns off and turns on video-stream
 	if(letter_box)
-		in_s3 = get_image_from_stream_letterbox(cap1, net.w, net.h, net.c, &in_img3, cpp_video_capture, dont_close_stream);
+		in_s3 = get_image_from_stream_letterbox(cap3, net.w, net.h, net.c, &in_img3, cpp_video_capture, dont_close_stream);
 	else
-		in_s3 = get_image_from_stream_resize(cap1, net.w, net.h, net.c, &in_img3, cpp_video_capture, dont_close_stream);
+		in_s3 = get_image_from_stream_resize(cap3, net.w, net.h, net.c, &in_img3, cpp_video_capture, dont_close_stream);
 	if(!in_s3.data){
 		//error("Stream closed.");
 		printf("Stream closed.\n");
@@ -391,15 +391,15 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
 	det_img = in_img;
 	det_s = in_s;
 
-	fetch_in_thread2(0);
-	det_img2 = in_img2;
-	det_s2 = in_s2;
+	// fetch_in_thread2(0);
+	// det_img2 = in_img2;
+	// det_s2 = in_s2;
 
-	fetch_in_thread2(0);
-	detect_in_thread_no_img2(0);
+	// fetch_in_thread2(0);
+	// detect_in_thread_no_img2(0);
 
-	det_img2 = in_img2;
-	det_s2 = in_s2;
+	// det_img2 = in_img2;
+	// det_s2 = in_s2;
 
 	int count = 0;
 	// dont_show = 1;

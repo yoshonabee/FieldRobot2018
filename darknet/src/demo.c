@@ -391,15 +391,15 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
 	det_img = in_img;
 	det_s = in_s;
 
-	// fetch_in_thread2(0);
-	// det_img2 = in_img2;
-	// det_s2 = in_s2;
+	fetch_in_thread2(0);
+	det_img2 = in_img2;
+	det_s2 = in_s2;
 
-	// fetch_in_thread2(0);
-	// detect_in_thread_no_img2(0);
+	fetch_in_thread2(0);
+	detect_in_thread_no_img2(0);
 
-	// det_img2 = in_img2;
-	// det_s2 = in_s2;
+	det_img2 = in_img2;
+	det_s2 = in_s2;
 
 	int count = 0;
 	dont_show = 1;

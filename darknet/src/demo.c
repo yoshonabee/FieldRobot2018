@@ -189,16 +189,12 @@ void *detect_in_thread(int c_num)
 	return 0;
 }
 
-void *detect_in_thread_no_img(int c_num) {
+void *detect_in_thread_no_img(void *ptr) {
 	float nms = .45;    // 0.4F
 
 	layer l = net.layers[net.n-1];
 	float *X = det_s.data;
 	float *prediction = network_predict(net, X);
-
-	memcpy(predictions[demo_index], prediction, l.outputs*sizeof(float));
-	mean_arrays(predictions, FRAMES, l.outputs, avg);
-	l.output = avg;
 
 	free_image(det_s);
 
@@ -221,7 +217,7 @@ void *detect_in_thread_no_img(int c_num) {
 		if (dets[obj].prob[0] > demo_thresh) {
 			printf("%f% ", dets[obj].prob[0] * 100);
 			printf("x:%f y:%f w:%f j:%f\n", dets[obj].bbox.x, dets[obj].bbox.y, dets[obj].bbox.w, dets[obj].bbox.h);
-			fprintf(fp, "%d, %f,%f,%f,%f\n", c_num, dets[obj].bbox.x, dets[obj].bbox.y, dets[obj].bbox.w, dets[obj].bbox.h);
+			fprintf(fp, "0, %f,%f,%f,%f\n", dets[obj].bbox.x, dets[obj].bbox.y, dets[obj].bbox.w, dets[obj].bbox.h);
 		}
 	}
 	
@@ -232,22 +228,18 @@ void *detect_in_thread_no_img(int c_num) {
 	return 0;
 }
 
-void *detect_in_thread_no_img_con(int c_num) {
+void *detect_in_thread_no_img2(void *ptr) {
 	float nms = .45;    // 0.4F
 
 	layer l = net.layers[net.n-1];
-	float *X = det_s.data;
+	float *X = det_s2.data;
 	float *prediction = network_predict(net, X);
 
-	memcpy(predictions[demo_index], prediction, l.outputs*sizeof(float));
-	mean_arrays(predictions, FRAMES, l.outputs, avg);
-	l.output = avg;
-
-	free_image(det_s);
+	free_image(det_s2);
 
 	int nboxes = 0;
 	detection *dets = NULL; 
-	dets = get_network_boxes(&net, det_s.w, det_s.h, demo_thresh, demo_thresh, 0, 1, &nboxes, 0); // resized
+	dets = get_network_boxes(&net, det_s2.w, det_s2.h, demo_thresh, demo_thresh, 0, 1, &nboxes, 0); // resized
 	if (nms) do_nms_sort(dets, nboxes, l.classes, nms);
 
 	printf("\033[2J");
@@ -264,7 +256,50 @@ void *detect_in_thread_no_img_con(int c_num) {
 		if (dets[obj].prob[0] > demo_thresh) {
 			printf("%f% ", dets[obj].prob[0] * 100);
 			printf("x:%f y:%f w:%f j:%f\n", dets[obj].bbox.x, dets[obj].bbox.y, dets[obj].bbox.w, dets[obj].bbox.h);
-			fprintf(fp, "%d, %f,%f,%f,%f\n", c_num, dets[obj].bbox.x, dets[obj].bbox.y, dets[obj].bbox.w, dets[obj].bbox.h);
+			fprintf(fp, "1, %f,%f,%f,%f\n", dets[obj].bbox.x, dets[obj].bbox.y, dets[obj].bbox.w, dets[obj].bbox.h);
+		}
+	}
+	
+	fclose(fp);
+	
+	free_detections(dets, nboxes);
+
+	return 0;
+}
+
+void *detect_in_thread_no_img3(void *ptr) {
+	float nms = .45;    // 0.4F
+
+	layer l = net.layers[net.n-1];
+	float *X = det_s3.data;
+	float *prediction = network_predict(net, X);
+
+	memcpy(predictions[demo_index], prediction, l.outputs*sizeof(float));
+	mean_arrays(predictions, FRAMES, l.outputs, avg);
+	l.output = avg;
+
+	free_image(det_s3);
+
+	int nboxes = 0;
+	detection *dets = NULL; 
+	dets = get_network_boxes(&net, det_s3.w, det_s3.h, demo_thresh, demo_thresh, 0, 1, &nboxes, 0); // resized
+	if (nms) do_nms_sort(dets, nboxes, l.classes, nms);
+
+	printf("\033[2J");
+	printf("\033[1;1H");
+	printf("%f", count_img / 20.0);
+	printf("\nFPS:%.1f\n",fps);
+	printf("Objects:\n\n");
+
+	
+	FILE *fp;
+	fp = fopen("../data/egg_info.csv", "a");
+	
+	for (int obj = 0; obj < nboxes; obj++) {
+		if (dets[obj].prob[0] > demo_thresh) {
+			printf("%f% ", dets[obj].prob[0] * 100);
+			printf("x:%f y:%f w:%f j:%f\n", dets[obj].bbox.x, dets[obj].bbox.y, dets[obj].bbox.w, dets[obj].bbox.h);
+			fprintf(fp, "1, %f,%f,%f,%f\n", dets[obj].bbox.x, dets[obj].bbox.y, dets[obj].bbox.w, dets[obj].bbox.h);
 		}
 	}
 	
@@ -356,23 +391,26 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
 	det_img = in_img;
 	det_s = in_s;
 
-	for(j = 0; j < FRAMES/2; ++j){
-		fetch_in_thread(0);
-		detect_in_thread_no_img(0);
-		det_img = in_img;
-		det_s = in_s;
-	}
+	fetch_in_thread2(0);
+	det_img2 = in_img2;
+	det_s2 = in_s2;
+
+	fetch_in_thread2(0);
+	detect_in_thread_no_img2(0);
+
+	det_img2 = in_img2;
+	det_s2 = in_s2;
 
 	int count = 0;
-	dont_show = 1;
-	if(!prefix && !dont_show){
-		cvNamedWindow("Demo", CV_WINDOW_NORMAL);
-		cvMoveWindow("Demo", 0, 0);
-		cvResizeWindow("Demo", 1352, 1013);
-	}
+	// dont_show = 1;
+	// if(!prefix && !dont_show){
+	// 	cvNamedWindow("Demo", CV_WINDOW_NORMAL);
+	// 	cvMoveWindow("Demo", 0, 0);
+	// 	cvResizeWindow("Demo", 1352, 1013);
+	// }
 
 	out_filename = calloc(20, sizeof(char));
-	strcpy(out_filename, "../../out02.avi");
+	strcpy(out_filename, "../../out03.avi");
 
 	CvVideoWriter* output_video_writer = NULL;    // cv::VideoWriter output_video;
 	if (out_filename && !flag_exit)
@@ -410,7 +448,7 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
 		cmd = fopen("../data/command", "r");
 		fscanf(cmd, "%d", &running_mode);
 		fclose(cmd);
-		printf("%d\n", running_mode);	
+		printf("%d\n", running_mode);
 		if(running_mode == 0){
 			printf("good\n");
 			if(pthread_create(&fetch_thread, 0, fetch_in_thread, 0)) error("Thread creation failed");
@@ -462,7 +500,7 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
 			if (select(FD_SETSIZE, &test, NULL, NULL, &tv))
 				flag_exit = 1;
 
-			if (flag_exit == 1) break;
+			// if (flag_exit == 1) break;
 
 			if(delay == 0){
 				show_img = det_img;
@@ -485,6 +523,8 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
 			if (select(FD_SETSIZE, &test, NULL, NULL, &tv))
 				flag_exit = 1;
 
+			// if (flag_exit) break;
+
 			cvReleaseImage(&det_img);
 			det_img = in_img;
 			det_s = in_s;
@@ -499,19 +539,19 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
 			det_img = in_img;
 			det_s = in_s;
 
-			if (pthread_create(&fetch_thread, 0, fetch_in_thread, 0)) error("Thread creation failed");
-			if (pthread_create(&detect_thread, 0, detect_in_thread_no_img_con, 1)) error("Thread creation failed");	
+			if (pthread_create(&fetch_thread, 0, fetch_in_thread2, 0)) error("Thread creation failed");
+			if (pthread_create(&detect_thread, 0, detect_in_thread_no_img2, 0)) error("Thread creation failed");	
 			pthread_join(fetch_thread, 0);
 			pthread_join(detect_thread, 0);
 
-			cvReleaseImage(&det_img);
-			det_img = in_img;
-			det_s = in_s;
+			cvReleaseImage(&det_img2);
+			det_img2 = in_img2;
+			det_s2 = in_s2;
 
-			if (pthread_create(&fetch_thread, 0, fetch_in_thread, 0)) error("Thread creation failed");
-			if (pthread_create(&detect_thread, 0, detect_in_thread_no_img_con, 2)) error("Thread creation failed");	
-			pthread_join(fetch_thread, 0);
-			pthread_join(detect_thread, 0);
+			// if (pthread_create(&fetch_thread, 0, fetch_in_thread3, 0)) error("Thread creation failed");
+			// if (pthread_create(&detect_thread, 0, detect_in_thread_no_img_con, 2)) error("Thread creation failed");	
+			// pthread_join(fetch_thread, 0);
+			// pthread_join(detect_thread, 0);
 
 			// if (output_video_writer && det_img) {
 			// 	cvWriteFrame(output_video_writer, det_img);
@@ -522,9 +562,11 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
 			if (select(FD_SETSIZE, &test, NULL, NULL, &tv))
 				flag_exit = 1;
 
-			cvReleaseImage(&det_img);
-			det_img = in_img;
-			det_s = in_s;
+			// cvReleaseImage(&det_img3);
+			// det_img3 = in_img3;
+			// det_s3 = in_s3;
+
+			// if (flag_exit) break;
 		}
 		--delay;
 		if(delay < 0){

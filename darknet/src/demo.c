@@ -35,8 +35,12 @@ static int demo_classes;
 static float **probs;
 static box *boxes;
 static network net;
-static image in_s ;
+static image in_s;
 static image det_s;
+static image in_s2;
+static image det_s2;
+static image in_s3;
+static image det_s3;
 static CvCapture * cap1;
 static CvCapture * cap2;
 static CvCapture * cap3;
@@ -60,6 +64,14 @@ int get_stream_fps(CvCapture *cap, int cpp_video_capture);
 IplImage* in_img;
 IplImage* det_img;
 IplImage* show_img;
+
+IplImage* in_img2;
+IplImage* det_img2;
+IplImage* show_img2;
+
+IplImage* in_img3;
+IplImage* det_img3;
+IplImage* show_img3;
 
 static int flag_exit;
 static int letter_box = 0;
@@ -86,20 +98,41 @@ void *fetch_in_thread(void *ptr)
 	return 0;
 }
 
-void *fetch_in_thread_caps(CvCapture *c)
+void *fetch_in_thread2(void *ptr)
 {
+	//in = get_image_from_stream(cap);
 	int dont_close_stream = 0;    // set 1 if your IP-camera periodically turns off and turns on video-stream
 	if(letter_box)
-		in_s = get_image_from_stream_letterbox(c, net.w, net.h, net.c, &in_img, cpp_video_capture, dont_close_stream);
+		in_s2 = get_image_from_stream_letterbox(cap2, net.w, net.h, net.c, &in_img2, cpp_video_capture, dont_close_stream);
 	else
-		in_s = get_image_from_stream_resize(c, net.w, net.h, net.c, &in_img, cpp_video_capture, dont_close_stream);
-	if(!in_s.data){
+		in_s2 = get_image_from_stream_resize(cap2, net.w, net.h, net.c, &in_img2, cpp_video_capture, dont_close_stream);
+	if(!in_s2.data){
 		//error("Stream closed.");
 		printf("Stream closed.\n");
 		flag_exit = 1;
 		return EXIT_FAILURE;
 	}
-	//in_s = resize_image(in, net.w, net.h);
+	//in_s2 = resize_image(in, net.w, net.h);
+	
+	count_img++;
+	return 0;
+}
+
+void *fetch_in_thread3(void *ptr)
+{
+	//in = get_image_from_stream(cap);
+	int dont_close_stream = 0;    // set 1 if your IP-camera periodically turns off and turns on video-stream
+	if(letter_box)
+		in_s3 = get_image_from_stream_letterbox(cap1, net.w, net.h, net.c, &in_img3, cpp_video_capture, dont_close_stream);
+	else
+		in_s3 = get_image_from_stream_resize(cap1, net.w, net.h, net.c, &in_img3, cpp_video_capture, dont_close_stream);
+	if(!in_s3.data){
+		//error("Stream closed.");
+		printf("Stream closed.\n");
+		flag_exit = 1;
+		return EXIT_FAILURE;
+	}
+	//in_s3 = resize_image(in, net.w, net.h);
 	
 	count_img++;
 	return 0;

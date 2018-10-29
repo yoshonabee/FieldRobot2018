@@ -24,8 +24,8 @@ void setup() {
   Serial.begin(115200);
 //  Wire.onReceive(receiveEvent);
 
-  cat.attach(CAT);
-  cat.write(45);
+  cat.attach(CAT, 700, 2400);
+  cat.write(95);
   
 //  pinMode(MotorA, OUTPUT);
 //  pinMode(MotorB, OUTPUT);
@@ -41,18 +41,18 @@ void setup() {
 }
 
 void loop() {
-  cat.write(45);
-  Serial.println(45);
-  delay(500);
-  cat.write(80);
-  Serial.println(80);
-  delay(500);
-  cat.write(45);
-  Serial.println(45);
-  delay(500);
-  cat.write(10);
-  Serial.println(10);
-  delay(500);
+//  cat.write(95);
+//  Serial.println(95);
+//  delay(1000);
+//  cat.write(85);
+//  Serial.println(85);
+//  delay(1000);
+//  cat.write(95);
+//  Serial.println(95);
+//  delay(1000);
+//  cat.write(103);
+//  Serial.println(103);
+//  delay(1000);
 //  Serial.println("cool");
 //  for (int i = 0; i < 10000000; i++) {
 //    if (start == '0') {

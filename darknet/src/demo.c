@@ -510,8 +510,6 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
 			if (select(FD_SETSIZE, &test, NULL, NULL, &tv))
 				flag_exit = 1;
 
-			// if (flag_exit == 1) break;
-
 			if(delay == 0){
 				show_img = det_img;
 			}
@@ -532,8 +530,6 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
 			test = inputs;
 			if (select(FD_SETSIZE, &test, NULL, NULL, &tv))
 				flag_exit = 1;
-
-			// if (flag_exit) break;
 
 			cvReleaseImage(&det_img);
 			det_img = in_img;
@@ -559,24 +555,23 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
 			det_s2 = in_s2;
 
 			if (pthread_create(&fetch_thread, 0, fetch_in_thread3, 0)) error("Thread creation failed");
-			if (pthread_create(&detect_thread, 0, detect_in_thread_no_img_con, 2)) error("Thread creation failed");	
+			if (pthread_create(&detect_thread, 0, detect_in_thread_no_img3, 0)) error("Thread creation failed");	
 			pthread_join(fetch_thread, 0);
 			pthread_join(detect_thread, 0);
 
-			if (output_video_writer && det_img) {
-				cvWriteFrame(output_video_writer, det_img);
-				printf("\n cvWriteFrame \n");
-			}
+			// if (output_video_writer && det_img) {
+			// 	cvWriteFrame(output_video_writer, det_img);
+			// 	printf("\n cvWriteFrame \n");
+			// }
 
 			test = inputs;
 			if (select(FD_SETSIZE, &test, NULL, NULL, &tv))
 				flag_exit = 1;
 
-			// cvReleaseImage(&det_img3);
-			// det_img3 = in_img3;
-			// det_s3 = in_s3;
+			cvReleaseImage(&det_img3);
+			det_img3 = in_img3;
+			det_s3 = in_s3;
 
-			// if (flag_exit) break;
 		}
 		--delay;
 		if(delay < 0){

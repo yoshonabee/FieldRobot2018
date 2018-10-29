@@ -402,7 +402,7 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
 	// det_s2 = in_s2;
 
 	int count = 0;
-	// dont_show = 1;
+	dont_show = 1;
 	// if(!prefix && !dont_show){
 	// 	cvNamedWindow("Demo", CV_WINDOW_NORMAL);
 	// 	cvMoveWindow("Demo", 0, 0);

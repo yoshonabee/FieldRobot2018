@@ -470,7 +470,7 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
 			det_s = in_s;
 		} else if (running_mode == 1) {
 
-			if (pthread_create(&fetch_thread, 0, fetch_in_thread_caps, cap1)) error("Thread creation failed");
+			if (pthread_create(&fetch_thread, 0, fetch_in_thread, 0)) error("Thread creation failed");
 			if (pthread_create(&detect_thread, 0, detect_in_thread_no_img, 0)) error("Thread creation failed");	
 			pthread_join(fetch_thread, 0);
 			pthread_join(detect_thread, 0);
@@ -489,7 +489,7 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
 			det_s = in_s;
 		} else if (running_mode == 2) {
 
-			if (pthread_create(&fetch_thread, 0, fetch_in_thread_caps, cap1)) error("Thread creation failed");
+			if (pthread_create(&fetch_thread, 0, fetch_in_thread, 0)) error("Thread creation failed");
 			if (pthread_create(&detect_thread, 0, detect_in_thread_no_img, 0)) error("Thread creation failed");	
 			pthread_join(fetch_thread, 0);
 			pthread_join(detect_thread, 0);
@@ -498,7 +498,7 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
 			det_img = in_img;
 			det_s = in_s;
 
-			if (pthread_create(&fetch_thread, 0, fetch_in_thread_caps, cap2)) error("Thread creation failed");
+			if (pthread_create(&fetch_thread, 0, fetch_in_thread, 0)) error("Thread creation failed");
 			if (pthread_create(&detect_thread, 0, detect_in_thread_no_img_con, 1)) error("Thread creation failed");	
 			pthread_join(fetch_thread, 0);
 			pthread_join(detect_thread, 0);
@@ -507,7 +507,7 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
 			det_img = in_img;
 			det_s = in_s;
 
-			if (pthread_create(&fetch_thread, 0, fetch_in_thread_caps, cap3)) error("Thread creation failed");
+			if (pthread_create(&fetch_thread, 0, fetch_in_thread, 0)) error("Thread creation failed");
 			if (pthread_create(&detect_thread, 0, detect_in_thread_no_img_con, 2)) error("Thread creation failed");	
 			pthread_join(fetch_thread, 0);
 			pthread_join(detect_thread, 0);

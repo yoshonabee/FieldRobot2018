@@ -261,7 +261,6 @@ void *detect_in_thread_no_img2(void *ptr) {
 	}
 	
 	fclose(fp);
-	
 	free_detections(dets, nboxes);
 
 	return 0;
@@ -304,7 +303,8 @@ void *detect_in_thread_no_img3(void *ptr) {
 	}
 	
 	fclose(fp);
-	
+	draw_detections_cv_v3(det_img3, dets, nboxes, demo_thresh, demo_names, demo_alphabet, demo_classes, demo_ext_output);
+
 	free_detections(dets, nboxes);
 
 	return 0;
@@ -544,15 +544,17 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
 			if (pthread_create(&fetch_thread, 0, fetch_in_thread, 0)) error("Thread creation failed");
 			if (pthread_create(&detect_thread, 0, detect_in_thread, 0)) error("Thread creation failed");	
 			
-			if (output_video_writer && show_img) {
-			 	cvWriteFrame(output_video_writer, show_img);
+			if (output_video_writer && show_img2) {
+			 	cvWriteFrame(output_video_writer, show_img2);
 			 	printf("\n cvWriteFrame \n");
 			}
+
+			cvReleaseImage(&show_img);
 
 			pthread_join(fetch_thread, 0);
 			pthread_join(detect_thread, 0);
 			printf("0\n");
-			cvReleaseImage(&det_img);
+			show_img = det_img;
 			det_img = in_img;
 			det_s = in_s;
 
@@ -560,15 +562,21 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
 
 			if (pthread_create(&fetch_thread, 0, fetch_in_thread2, 0)) error("Thread creation failed");
 			if (pthread_create(&detect_thread, 0, detect_in_thread_no_img2, 0)) error("Thread creation failed");	
+			
+			cvReleaseImage(&show_img2);
+
 			pthread_join(fetch_thread, 0);
 			pthread_join(detect_thread, 0);
 			printf("1\n");
-			cvReleaseImage(&det_img2);
+			show_img2 = det_img2;
 			det_img2 = in_img2;
 			det_s2 = in_s2;
 
 			if (pthread_create(&fetch_thread, 0, fetch_in_thread3, 0)) error("Thread creation failed");
 			if (pthread_create(&detect_thread, 0, detect_in_thread_no_img3, 0)) error("Thread creation failed");	
+			
+			cvReleaseImage(&show_img3);
+
 			pthread_join(fetch_thread, 0);
 			pthread_join(detect_thread, 0);
 			printf("2\n");
@@ -577,8 +585,7 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
 			test = inputs;
 			if (select(FD_SETSIZE, &test, NULL, NULL, &tv))
 				flag_exit = 1;
-
-			cvReleaseImage(&det_img3);
+			show_img3 = det_img3;
 			det_img3 = in_img3;
 			det_s3 = in_s3;
 

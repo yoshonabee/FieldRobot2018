@@ -1,3 +1,4 @@
+import sys
 import math
 from egg import *
 from utils import *
@@ -11,9 +12,12 @@ SPD = 60
 
 action = Actions(ADDR_LEFT, ADDR_RIGHT, ADDR_MEGA)
 
-egg_eaten = 0
+egg_eaten = sys.argv[1]
 mission_complete = False
 last_target = None
+
+if (len(sys.argv) > 2):
+	move(sys.argv[2:])
 
 y = yolo(2)
 while not mission_complete:
@@ -40,7 +44,7 @@ while not mission_complete:
 		
 		diff = True
 		for i in range(5):
-			sleep(0.15)
+			sleep(0.1)
 			target = getTarget()
 
 			if target is None:
@@ -53,9 +57,8 @@ while not mission_complete:
 
 		if diff:
 			y = yolo(2)
-			action.forward(0, 0)
-			sleep(0.5)
 			action.forward(60, 60)
+			sleep(0.3)
 			egg_eaten += 1
 			last_target = None
 
@@ -64,8 +67,8 @@ while not mission_complete:
 
 	print(egg_eaten)
 	if (egg_eaten == 2):
-		# action.forward(60, 60)
-		# sleep(2.5)
+		action.forward(60, 60)
+		sleep(1.5)
 		mission_complete = True
 
 	sleep(0.03)

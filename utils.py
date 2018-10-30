@@ -1,10 +1,13 @@
 import math
 from egg import *
 from actions import Actions
-from time import sleep, time
+from time import sleep
 
 THRES_MID = 0.04
 STD_SPEED = 60
+TD = 40
+TURN = 1
+FORWARD = 2
 
 def yolo(c):
 	f = open('data/command', 'w')
@@ -17,15 +20,28 @@ def track(target, action):
 	if target.cam != 0:
 		if target.cam == 1:
 			action.turn(-60)
-			sleep(0.7)
+			sleep(1-target.x)
 		else:
 			action.turn(60)
-			sleep(0.7)
+			sleep(target.x)
 
 		target = getTarget()
 		while target is None:
 			target = getTarget()
 
 	loss = target.x - 0.5
-	action.forward(STD_SPEED + loss * 40, STD_SPEED - loss * 40)
+	action.forward(STD_SPEED + loss * TD, STD_SPEED - loss * TD)
 	return target
+
+def move(M, action):
+	for m in M:
+		if m == 'r':
+			action.turn(60)
+			sleep(TURN)
+		elif m == 'l':
+			action.turn(-60)
+			sleep(TURN):
+		else:
+			action.forward(60, 60)
+			sleep(int(m) * FORWARD)
+

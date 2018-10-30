@@ -544,8 +544,8 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
 			if (pthread_create(&fetch_thread, 0, fetch_in_thread, 0)) error("Thread creation failed");
 			if (pthread_create(&detect_thread, 0, detect_in_thread, 0)) error("Thread creation failed");	
 			
-			if (output_video_writer && show_img2) {
-			 	cvWriteFrame(output_video_writer, show_img2);
+			if (output_video_writer && show_img) {
+			 	cvWriteFrame(output_video_writer, show_img);
 			 	printf("\n cvWriteFrame \n");
 			}
 
@@ -584,7 +584,7 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
 			test = inputs;
 			if (select(FD_SETSIZE, &test, NULL, NULL, &tv))
 				flag_exit = 1;
-			
+
 			show_img3 = det_img3;
 			det_img3 = in_img3;
 			det_s3 = in_s3;

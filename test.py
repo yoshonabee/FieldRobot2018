@@ -28,7 +28,6 @@ while not mission_complete:
 	targets.add(getTarget())
 	
 	if targets.allNone():
-		yolo(2)
 		action.forward(SPD, SPD)
 		continue
 
@@ -75,5 +74,5 @@ while not mission_complete:
 		sleep(2.5)
 		mission_complete = True
 
-	sleep(0.03)
+	sleep(0.04)
 action.forward(0, 0)

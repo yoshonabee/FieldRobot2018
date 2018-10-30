@@ -34,6 +34,7 @@ while not mission_complete:
 
 	elif target is None or last_target.y > target.y:
 		print(last_target.y, target.y)
+		action.forward(0, 0)
 		exit()
 		diff = True
 		for i in range(5):

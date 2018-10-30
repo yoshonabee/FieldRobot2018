@@ -20,12 +20,6 @@ def getTarget():
 
 	eggs = [Egg(int(r[0]), float(r[1]), float(r[2]), float(r[3]), float(r[4])) for r in row]
 	f.close()
-	
-	if len(eggs) == 0:
-		return None
-
-	#print("\033[2J")
-	#print("\033[1;1H")
 
 	neareat_egg = None;
 	for i in eggs:

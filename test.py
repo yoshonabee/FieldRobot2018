@@ -2,8 +2,7 @@ import math
 from egg import *
 from utils import *
 from actions import Actions
-from time import sleep, time
-from que import Queue
+from time import sleep
 
 ADDR_LEFT = 0x04
 ADDR_RIGHT = 0x08
@@ -16,24 +15,14 @@ egg_eaten = 0
 mission_complete = False
 last_target = None
 
-targets = Queue(5)
-
-#action.start();
-#se = loadModel()
-
-start_time = time()
-last_time = start_time
 yolo(2)
 while not mission_complete:
-	targets.add(getTarget())
-	
-	if targets.allNone():
-		action.forward(SPD, SPD)
+	target = getTarget()
+
+	if target == None and last_target == None:
 		continue
 
-	target = targets.get()
 	yolo(1)
-	
 	if target.cam != 0:
 		action.forward(0, 0)
 		sleep(0.2)
@@ -41,21 +30,18 @@ while not mission_complete:
 	
 	if last_target is None:
 		last_target = target
-		sleep(0.03)
-		continue
 
-	if last_target.y <= target.y:
-		last_target = track(target, action)
-	else:
+	elif target is None or last_target.y > target.y:
+		print(last_target.y, target.y)
+		exit()
 		diff = True
 		for i in range(5):
 			sleep(0.1)
-			targets.add(getTarget())
+			target = getTarget()
 
-			if targets.allNone():
+			if target is None:
 				continue
 
-			target = targets.get()
 			if last_target.y <= target.y:
 				diff = False
 				last_target = track(target, action)
@@ -66,13 +52,16 @@ while not mission_complete:
 			action.forward(0, 0)
 			sleep(0.5)
 			egg_eaten += 1
-			targets.clear()
 			last_target = None
+
+	else:
+		last_target = track(target, action)
+
 	print(egg_eaten)
 	if (egg_eaten == 2):
 		action.forward(60, 60)
 		sleep(2.5)
 		mission_complete = True
 
-	sleep(0.04)
+	sleep(0.03)
 action.forward(0, 0)

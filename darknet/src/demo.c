@@ -525,16 +525,18 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
 			 	printf("\n cvWriteFrame \n");
 			}
 
+			cvReleaseImage(&show_img);
+
 			pthread_join(fetch_thread, 0);
 			pthread_join(detect_thread, 0);
-
-			
 
 			test = inputs;
 			if (select(FD_SETSIZE, &test, NULL, NULL, &tv))
 				flag_exit = 1;
 
-			cvReleaseImage(&det_img);
+			if(delay == 0){
+				show_img = det_img;
+			}
 			det_img = in_img;
 			det_s = in_s;
 		} else if (running_mode == 2) {

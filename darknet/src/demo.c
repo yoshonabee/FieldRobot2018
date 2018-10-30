@@ -581,10 +581,10 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
 			pthread_join(detect_thread, 0);
 			printf("2\n");
 			
-
 			test = inputs;
 			if (select(FD_SETSIZE, &test, NULL, NULL, &tv))
 				flag_exit = 1;
+			
 			show_img3 = det_img3;
 			det_img3 = in_img3;
 			det_s3 = in_s3;

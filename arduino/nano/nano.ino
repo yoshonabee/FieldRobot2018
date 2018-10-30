@@ -23,7 +23,7 @@ char last_direct;
 String spd_str;
 
 void setup() {
-  Wire.begin(0x08);
+  Wire.begin(0x04);
   Serial.begin(115200);
   Wire.onReceive(receiveEvent);
 

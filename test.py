@@ -1,6 +1,4 @@
 import math
-import torch
-# from SE import *
 from egg import *
 from utils import *
 from actions import Actions
@@ -25,7 +23,7 @@ se = loadModel()
 
 start_time = time()
 last_time = start_time
-
+yolo(2)
 while not mission_complete:
 	targets.add(getTarget())
 	
@@ -47,10 +45,6 @@ while not mission_complete:
 		sleep(0.03)
 		continue
 
-	if time() - last_time > 0.1:
-		print('time: {0}::{1},{2},{3},{4},{5},{6},{7},{8}'.format(time() - start_time, target.x, target.y, target.w, target.h, last_target.x, last_target.y, last_target.w, last_target.h))
-		last_time = time()
-
 	if last_target.y <= target.y:
 		last_target = track(target, action)
 	else:
@@ -70,9 +64,16 @@ while not mission_complete:
 
 		if diff:
 			yolo(2)
-			sleep(0.07)
+			action(0, 0)
+			sleep(0.5)
+			egg_eaten += 1
 			targets.clear()
 			last_target = None
+
+	if (egg_eaten == 20):
+		action(60, 60)
+		sleep(2.5)
+		mission_complete = True
 
 	sleep(0.03)
 action.forward(0, 0)

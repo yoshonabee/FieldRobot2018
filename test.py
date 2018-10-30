@@ -1,5 +1,4 @@
 import sys
-import math
 from egg import *
 from utils import *
 from actions import Actions

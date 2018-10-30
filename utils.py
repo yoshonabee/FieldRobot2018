@@ -7,7 +7,8 @@ THRES_MID = 0.04
 STD_SPEED = 60
 TD = 40
 TURN = 1
-FORWARD = 2
+FORWARD = 1.8
+L_FORWARD = 58 / 43 * FORWARD
 
 def yolo(c):
 	f = open('data/command', 'w')
@@ -41,7 +42,10 @@ def move(M, action):
 		elif m == 'l':
 			action.turn(-60)
 			sleep(TURN):
+		elif m == 'b':
+			action.forward(60, 60)
+			sleep(L_FORWARD)
 		else:
 			action.forward(60, 60)
-			sleep(int(m) * FORWARD)
+			sleep(float(m) * FORWARD)
 

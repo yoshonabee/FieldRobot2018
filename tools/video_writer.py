@@ -9,7 +9,7 @@ height = 720
 fourcc = cv.VideoWriter_fourcc('M', 'J', 'P', 'G')
 #out = cv.VideoWriter(output_path, fourcc, 20, (width, height))
 
-cap = cv.VideoCapture(1)
+cap = cv.VideoCapture(0)
 cap.set(cv.CAP_PROP_FRAME_WIDTH, width)
 cap.set(cv.CAP_PROP_FRAME_HEIGHT, height)
 

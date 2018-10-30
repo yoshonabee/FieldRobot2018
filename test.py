@@ -32,7 +32,7 @@ while not mission_complete:
 	elif last_target is None:
 		last_target = track(target, action)
 
-	elif target is None or last_target.y > target.y:
+	elif target is None or last_target.y - 0.1 > target.y:
 		print(last_target.y, target.y)
 		action.forward(0, 0)
 		exit()

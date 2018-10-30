@@ -40,7 +40,7 @@ while not mission_complete:
 		
 		diff = True
 		for i in range(5):
-			sleep(0.1)
+			sleep(0.15)
 			target = getTarget()
 
 			if target is None:
@@ -55,6 +55,7 @@ while not mission_complete:
 			y = yolo(2)
 			action.forward(0, 0)
 			sleep(0.5)
+			action.forward(60, 60)
 			egg_eaten += 1
 			last_target = None
 

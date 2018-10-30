@@ -15,19 +15,21 @@ egg_eaten = 0
 mission_complete = False
 last_target = None
 
-yolo(2)
+y = yolo(2)
 while not mission_complete:
 	target = getTarget()
 
 	if target == None and last_target == None:
-		yolo(2)
+		y = yolo(2)
 		continue
 
-	yolo(1)
-	if target.cam != 0:
-		action.forward(0, 0)
-		sleep(0.2)
-		last_target = track(target, action)
+	if y == 2:
+		y = yolo(1)
+		
+		if target.cam != 0:
+			action.forward(0, 0)
+			sleep(0.2)
+			last_target = track(target, action)
 	
 	elif last_target is None:
 		last_target = track(target, action)
@@ -50,7 +52,7 @@ while not mission_complete:
 				break;
 
 		if diff:
-			yolo(2)
+			y = yolo(2)
 			action.forward(0, 0)
 			sleep(0.5)
 			egg_eaten += 1

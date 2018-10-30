@@ -10,7 +10,7 @@ def yolo(c):
 	f = open('data/command', 'w')
 	f.write(str(c)+'\n')
 	f.close()
-	return
+	return c
 
 
 def track(target, action):

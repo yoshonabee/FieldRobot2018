@@ -138,7 +138,7 @@ void *fetch_in_thread3(void *ptr)
 	return 0;
 }
 
-void *detect_in_thread(int c_num)
+void *detect_in_thread(void *ptr)
 {
 	float nms = .45;    // 0.4F
 
@@ -178,7 +178,7 @@ void *detect_in_thread(int c_num)
 		if (dets[obj].prob[0] > demo_thresh) {
 			printf("%f% ", dets[obj].prob[0] * 100);
 			printf("x:%f y:%f w:%f j:%f\n", dets[obj].bbox.x, dets[obj].bbox.y, dets[obj].bbox.w, dets[obj].bbox.h);
-			fprintf(fp, "%d, %f,%f,%f,%f\n", c_num, dets[obj].bbox.x, dets[obj].bbox.y, dets[obj].bbox.w, dets[obj].bbox.h);
+			fprintf(fp, "0,%f,%f,%f,%f\n", dets[obj].bbox.x, dets[obj].bbox.y, dets[obj].bbox.w, dets[obj].bbox.h);
 		}
 	}
 	
@@ -217,7 +217,7 @@ void *detect_in_thread_no_img(void *ptr) {
 		if (dets[obj].prob[0] > demo_thresh) {
 			printf("%f% ", dets[obj].prob[0] * 100);
 			printf("x:%f y:%f w:%f j:%f\n", dets[obj].bbox.x, dets[obj].bbox.y, dets[obj].bbox.w, dets[obj].bbox.h);
-			fprintf(fp, "0, %f,%f,%f,%f\n", dets[obj].bbox.x, dets[obj].bbox.y, dets[obj].bbox.w, dets[obj].bbox.h);
+			fprintf(fp, "0,%f,%f,%f,%f\n", dets[obj].bbox.x, dets[obj].bbox.y, dets[obj].bbox.w, dets[obj].bbox.h);
 		}
 	}
 	
@@ -256,7 +256,7 @@ void *detect_in_thread_no_img2(void *ptr) {
 		if (dets[obj].prob[0] > demo_thresh) {
 			printf("%f% ", dets[obj].prob[0] * 100);
 			printf("x:%f y:%f w:%f j:%f\n", dets[obj].bbox.x, dets[obj].bbox.y, dets[obj].bbox.w, dets[obj].bbox.h);
-			fprintf(fp, "1, %f,%f,%f,%f\n", dets[obj].bbox.x, dets[obj].bbox.y, dets[obj].bbox.w, dets[obj].bbox.h);
+			fprintf(fp, "1,%f,%f,%f,%f\n", dets[obj].bbox.x, dets[obj].bbox.y, dets[obj].bbox.w, dets[obj].bbox.h);
 		}
 	}
 	
@@ -298,7 +298,7 @@ void *detect_in_thread_no_img3(void *ptr) {
 		if (dets[obj].prob[0] > demo_thresh) {
 			printf("%f% ", dets[obj].prob[0] * 100);
 			printf("x:%f y:%f w:%f j:%f\n", dets[obj].bbox.x, dets[obj].bbox.y, dets[obj].bbox.w, dets[obj].bbox.h);
-			fprintf(fp, "1, %f,%f,%f,%f\n", dets[obj].bbox.x, dets[obj].bbox.y, dets[obj].bbox.w, dets[obj].bbox.h);
+			fprintf(fp, "2,%f,%f,%f,%f\n", dets[obj].bbox.x, dets[obj].bbox.y, dets[obj].bbox.w, dets[obj].bbox.h);
 		}
 	}
 	

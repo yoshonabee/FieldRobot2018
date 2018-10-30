@@ -37,8 +37,7 @@ while not mission_complete:
 	elif target is None or last_target.y - 0.1 > target.y:
 		if target is not None:
 			print(last_target.y, target.y)
-		action.forward(0, 0)
-		exit()
+		
 		diff = True
 		for i in range(5):
 			sleep(0.1)
@@ -64,8 +63,8 @@ while not mission_complete:
 
 	print(egg_eaten)
 	if (egg_eaten == 2):
-		action.forward(60, 60)
-		sleep(2.5)
+		# action.forward(60, 60)
+		# sleep(2.5)
 		mission_complete = True
 
 	sleep(0.03)

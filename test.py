@@ -20,6 +20,7 @@ while not mission_complete:
 	target = getTarget()
 
 	if target == None and last_target == None:
+		yolo(2)
 		continue
 
 	yolo(1)
@@ -28,8 +29,8 @@ while not mission_complete:
 		sleep(0.2)
 		last_target = track(target, action)
 	
-	if last_target is None:
-		last_target = target
+	elif last_target is None:
+		last_target = track(target, action)
 
 	elif target is None or last_target.y > target.y:
 		print(last_target.y, target.y)

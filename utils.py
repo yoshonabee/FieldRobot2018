@@ -17,17 +17,15 @@ def track(target, action):
 	if target.cam != 0:
 		if target.cam == 1:
 			action.turn(-60)
-			sleep(1)
+			sleep(0.7)
 		else:
 			action.turn(60)
-			sleep(1)
+			sleep(0.7)
 
 		target = getTarget()
 		while target is None:
 			target = getTarget()
 
-		action.forward(40, 40)
-	else:
-		loss = target.x - 0.5
-		action.forward(STD_SPEED + loss * 40, STD_SPEED - loss * 40)
+	loss = target.x - 0.5
+	action.forward(STD_SPEED + loss * 40, STD_SPEED - loss * 40)
 	return target

@@ -540,7 +540,7 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
 			if (pthread_create(&detect_thread, 0, detect_in_thread_no_img, 0)) error("Thread creation failed");	
 			pthread_join(fetch_thread, 0);
 			pthread_join(detect_thread, 0);
-
+			printf("0\n");
 			cvReleaseImage(&det_img);
 			det_img = in_img;
 			det_s = in_s;
@@ -549,7 +549,7 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
 			if (pthread_create(&detect_thread, 0, detect_in_thread_no_img2, 0)) error("Thread creation failed");	
 			pthread_join(fetch_thread, 0);
 			pthread_join(detect_thread, 0);
-
+			printf("1\n");
 			cvReleaseImage(&det_img2);
 			det_img2 = in_img2;
 			det_s2 = in_s2;
@@ -558,7 +558,7 @@ void demo(char *cfgfile, char *weightfile, float thresh, float hier_thresh, int 
 			if (pthread_create(&detect_thread, 0, detect_in_thread_no_img3, 0)) error("Thread creation failed");	
 			pthread_join(fetch_thread, 0);
 			pthread_join(detect_thread, 0);
-
+			printf("2\n");
 			// if (output_video_writer && det_img) {
 			// 	cvWriteFrame(output_video_writer, det_img);
 			// 	printf("\n cvWriteFrame \n");

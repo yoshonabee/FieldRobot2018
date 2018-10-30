@@ -25,8 +25,7 @@ def track(target, action):
 		target = getTarget()
 		while target is None:
 			target = getTarget()
-		while target.x < 0.4 or target.x > 0.6:
-			target = getTarget()
+
 		action.forward(40, 40)
 	else:
 		loss = target.x - 0.5

@@ -23,7 +23,7 @@ class Queue():
 
 	def clear(self):
 		while len(self.queue) > 0:
-			print(self.queue.pop(0))
+			self.queue.pop(0)
 
 	def allNone(self):
 		for i in self.queue:

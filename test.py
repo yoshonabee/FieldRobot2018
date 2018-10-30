@@ -18,8 +18,8 @@ last_target = None
 
 targets = Queue(5)
 
-action.start();
-se = loadModel()
+#action.start();
+#se = loadModel()
 
 start_time = time()
 last_time = start_time
@@ -53,25 +53,25 @@ while not mission_complete:
 			sleep(0.1)
 			targets.add(getTarget())
 
-			if target.allNone():
+			if targets.allNone():
 				continue
 
 			target = targets.get()
-			if last_target.y <= target:
+			if last_target.y <= target.y:
 				diff = False
 				last_target = track(target, action)
 				break;
 
 		if diff:
 			yolo(2)
-			action(0, 0)
+			action.forward(0, 0)
 			sleep(0.5)
 			egg_eaten += 1
 			targets.clear()
 			last_target = None
-
-	if (egg_eaten == 20):
-		action(60, 60)
+	print(egg_eaten)
+	if (egg_eaten == 2):
+		action.forward(60, 60)
 		sleep(2.5)
 		mission_complete = True
 

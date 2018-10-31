@@ -10,7 +10,8 @@ ADDR_MEGA = 0x0c
 SPD = 45
 
 action = Actions(ADDR_LEFT, ADDR_RIGHT, ADDR_MEGA)
-
+move(['r', 'r'], action)
+exit()
 egg_eaten = int(sys.argv[1])
 mission_complete = False
 last_target = None
@@ -69,9 +70,9 @@ while not mission_complete:
 
 	print(egg_eaten)
 	if (egg_eaten == 20):
-		action.forward(45, 45)
-		sleep(2)
+		move(['r', 'r'], action)
+		action.forward(60, 60)
 		mission_complete = True
 
 	sleep(0.03)
-action.forward(0, 0)
+# action.forward(0, 0)

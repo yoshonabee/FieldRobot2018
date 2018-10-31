@@ -7,7 +7,7 @@ from time import sleep
 ADDR_LEFT = 0x04
 ADDR_RIGHT = 0x08
 ADDR_MEGA = 0x0c
-SPD = 60
+SPD = 45
 
 action = Actions(ADDR_LEFT, ADDR_RIGHT, ADDR_MEGA)
 
@@ -16,7 +16,7 @@ mission_complete = False
 last_target = None
 
 if (len(sys.argv) > 2):
-	move(sys.argv[2:])
+	move(sys.argv[2:], action)
 
 y = yolo(2)
 while not mission_complete:
@@ -43,7 +43,7 @@ while not mission_complete:
 		
 		diff = True
 		for i in range(5):
-			sleep(0.1)
+			sleep(0.133)
 			target = getTarget()
 
 			if target is None:
@@ -56,7 +56,7 @@ while not mission_complete:
 
 		if diff:
 			y = yolo(2)
-			action.forward(60, 60)
+			action.forward(45, 45)
 			sleep(0.3)
 			egg_eaten += 1
 			last_target = None
@@ -65,9 +65,9 @@ while not mission_complete:
 		last_target = track(target, action)
 
 	print(egg_eaten)
-	if (egg_eaten == 2):
-		action.forward(60, 60)
-		sleep(1.5)
+	if (egg_eaten == 20):
+		action.forward(45, 45)
+		sleep(2)
 		mission_complete = True
 
 	sleep(0.03)

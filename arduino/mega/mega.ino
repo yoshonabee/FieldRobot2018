@@ -1,5 +1,6 @@
 #include <Wire.h>
 #include <Servo.h>
+#include <time.h>
 
 #define MotorA 10
 #define MotorB 11
@@ -13,107 +14,104 @@
 #define sensorOut 26
 
 char start = '0';
-
+int mi = 1520;
+int ra = 200;
 int red = 0, green = 0, blue = 0, color;
-int min_red = 255, min_green = 255, min_blue = 255;
+int min_red = 2000, min_green = 2000, min_blue = 2000;
 
 Servo cat;
 
 void setup() {
-//  Wire.begin(0x0c);
+  Wire.begin(0x0c);
   Serial.begin(115200);
-//  Wire.onReceive(receiveEvent);
+  Wire.onReceive(receiveEvent);
 
-  cat.attach(CAT, 700, 2400);
-  cat.write(95);
-  
-//  pinMode(MotorA, OUTPUT);
-//  pinMode(MotorB, OUTPUT);
-//
-//  pinMode(S0, OUTPUT);
-//  pinMode(S1, OUTPUT);
-//  pinMode(S2, OUTPUT);
-//  pinMode(S3, OUTPUT);
-//  pinMode(sensorOut, INPUT);
-//
-//  digitalWrite(S0, HIGH);
-//  digitalWrite(S1, LOW);
+  cat.attach(CAT);
+  cat.writeMicroseconds(mi); 
+
+  pinMode(MotorA, OUTPUT);
+  pinMode(MotorB, OUTPUT);
+  analogWrite(MotorA, 130);
+  analogWrite(MotorB, 0);
+
+  pinMode(S0, OUTPUT);
+  pinMode(S1, OUTPUT);
+  pinMode(S2, OUTPUT);
+  pinMode(S3, OUTPUT);
+  pinMode(sensorOut, INPUT);
+
+  digitalWrite(S0, LOW);
+  digitalWrite(S1, HIGH);
 }
 
 void loop() {
-//  cat.write(95);
-//  Serial.println(95);
-//  delay(1000);
-//  cat.write(85);
-//  Serial.println(85);
-//  delay(1000);
-//  cat.write(95);
-//  Serial.println(95);
-//  delay(1000);
-//  cat.write(103);
-//  Serial.println(103);
-//  delay(1000);
-//  Serial.println("cool");
-//  for (int i = 0; i < 10000000; i++) {
-//    if (start == '0') {
-//       analogWrite(MotorA, 120);
-//       analogWrite(MotorB, 0);
-//      
-//      color = get_color();
-//      
-//      // if (color == 1) {
-//      //   cat.write(120);
-//      //   delay(2000);
-//      // } else if (color == 2) {
-//      //   cat.write(60);
-//      //   delay(2000);
-//      // }
-//      
-//      // cat.write(90);
-//    }
-////  }
-//  min_red = 255;
-//  min_blue = 255;
-//  min_green = 255;
+    color = turn();
+    if (color == 1){
+      cat.writeMicroseconds(mi+ra);
+      delay(1500);
+      cat.writeMicroseconds(mi);
+    } else if (color == 2){
+      cat.writeMicroseconds(mi-ra);
+      delay(1500);
+      cat.writeMicroseconds(mi);
+    }
+
+    min_red = 2000;
+    min_blue = 2000;
+    min_green = 2000;
 }
 
 int get_color() {
-  digitalWrite(S2,LOW);
-  digitalWrite(S3,LOW);
-  red = pulseIn(sensorOut, LOW);
-
-  min_red = min(red, min_red);
- 
-  Serial.print("R= ");
-  Serial.print(min_red);
-  Serial.print("  ");
-  delay(10);
-
-  digitalWrite(S2,HIGH);
-  digitalWrite(S3,HIGH);
-  green = pulseIn(sensorOut, LOW);
-
-  min_green = min(green, min_green);
+    digitalWrite(S2,LOW);
+    digitalWrite(S3,LOW);
+    red = pulseIn(sensorOut, LOW);
   
-  Serial.print("G= ");
-  Serial.print(min_green);
-  Serial.print("  ");
-  delay(10);
-
-  digitalWrite(S2,LOW);
-  digitalWrite(S3,HIGH);
-  blue = pulseIn(sensorOut, LOW);
-
-  min_blue = min(blue, min_blue);
+    min_red = min(red, min_red);
+   
+    Serial.print("R= ");
+    Serial.print(min_red);
+    Serial.print("  ");
+    delay(10);
   
-  Serial.print("B= ");
-  Serial.print(min_blue);
-  Serial.println("  ");
-  delay(10);
+    digitalWrite(S2,HIGH);
+    digitalWrite(S3,HIGH);
+    green = pulseIn(sensorOut, LOW);
+  
+    min_green = min(green, min_green);
+    
+    Serial.print("G= ");
+    Serial.print(min_green);
+    Serial.print("  ");
+    delay(10);
+  
+    digitalWrite(S2,LOW);
+    digitalWrite(S3,HIGH);
+    blue = pulseIn(sensorOut, LOW);
+  
+    min_blue = min(blue, min_blue);
+    
+    Serial.print("B= ");
+    Serial.print(min_blue);
+    Serial.println("  ");
+    delay(10);
 
-  if (red < 45 && green < 45 && blue < 45) return 1;
-  else if (red < 55 && green < 55 && blue < 55) return 2;
-  else return 0;
+    min_red = min(red, min_red);
+    min_green = min(green, min_green);
+    min_blue = min(blue, min_blue);
+}
+
+int turn() {
+  get_color();
+  if (min_red < 1000 && min_green < 1000 && min_blue < 1000) {
+    for (int i = 0; i < 3; i++) {
+      get_color();
+    }
+
+      if (min_red < 400 && min_green < 450 && min_blue < 150) return 1;
+      else return 2;
+  }
+
+  return 0;
 }
 
 void receiveEvent() {

@@ -11,7 +11,7 @@ SPD = 60
 
 action = Actions(ADDR_LEFT, ADDR_RIGHT, ADDR_MEGA)
 
-egg_eaten = sys.argv[1]
+egg_eaten = int(sys.argv[1])
 mission_complete = False
 last_target = None
 

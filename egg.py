@@ -23,7 +23,6 @@ def getTarget():
 
 	neareat_egg = None;
 	for i in eggs:
-		#i.print()
 		if neareat_egg == None:
 			neareat_egg = i
 

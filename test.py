@@ -10,8 +10,7 @@ ADDR_MEGA = 0x0c
 SPD = 45
 
 action = Actions(ADDR_LEFT, ADDR_RIGHT, ADDR_MEGA)
-move(['r', 'r'], action)
-exit()
+
 egg_eaten = int(sys.argv[1])
 mission_complete = False
 last_target = None

@@ -5,7 +5,7 @@ from time import sleep
 
 THRES_MID = 0.04
 STD_SPEED = 60
-TD = 40
+TD = 50
 TURN = 1.1
 FORWARD = 1.8
 L_FORWARD = 58 / 43 * FORWARD

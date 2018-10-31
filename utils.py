@@ -20,11 +20,11 @@ def yolo(c):
 def track(target, action):
 	if target.cam != 0:
 		if target.cam == 1:
-			action.turn(-60)
-			sleep(1-target.x)
-		else:
 			action.turn(60)
 			sleep(target.x)
+		else:
+			action.turn(-60)
+			sleep(1 - target.x)
 
 		target = getTarget()
 		while target is None:
@@ -41,7 +41,7 @@ def move(M, action):
 			sleep(TURN)
 		elif m == 'l':
 			action.turn(-60)
-			sleep(TURN):
+			sleep(TURN)
 		elif m == 'b':
 			action.forward(60, 60)
 			sleep(L_FORWARD)

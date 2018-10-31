@@ -7,12 +7,12 @@ ADDR_LEFT = 0x04
 ADDR_RIGHT = 0x08
 ADDR_MEGA = 0x0c
 SPD = 60
-TD = 20
+TD = 30
 
 I = 13
-C1 = 12
-C2 = 10.5
-C3 = 9
+C1 = 11
+C2 = 7.7
+C3 = 5.5
 C4 = 7.5
 C5 = 6
 C6 = 4.5

@@ -15,6 +15,9 @@ egg_eaten = int(sys.argv[1])
 mission_complete = False
 last_target = None
 
+action.forward(45, 45)
+sleep(1)
+
 if (len(sys.argv) > 2):
 	move(sys.argv[2:], action)
 

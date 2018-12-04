@@ -46,7 +46,7 @@ while not mission_complete:
 		
 		diff = True
 		for i in range(5):
-			sleep(0.133)
+			sleep(0.14)
 			target = getTarget()
 
 			if target is None:
